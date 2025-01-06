@@ -1,47 +1,52 @@
 #ifndef GRID_H
 #define GRID_H
 
-#include "GridCell.h"
 #include <vector>
+#include <set>
 #include <string>
-#include <cstdlib>
-#include <ctime>
+#include <utility>
+#include "GridCell.h"
 
-// Represents the grid
+// Type alias for position in the grid (row, column)
+using Pos = std::pair<int, int>;
+
+// Enumeration for the direction of the ball
+enum class Direction {
+    Up,
+    Down,
+    Left,
+    Right,
+    None
+};
+
 class Grid {
-    int gridSize;
-    int minObjects;
-    int maxObjects;
-    std::vector<GridCellType> viableCellTypes;
-    Pos startPos;
-    Pos endPos;
+public:
+    int gridSize;                                 // Size of the grid
+    int minObjects;                               // Minimum number of objects to place
+    int maxObjects;                               // Maximum number of objects to place
+    std::vector<GridCellType> objectTypes;        // Types of grid objects
     std::vector<std::vector<GridCell*>> gridCells; // 2D grid of cells
 
-public:
     // Constructor
-    Grid(int size, int minObjects, int maxObjects, std::vector<GridCellType> viableCellTypes);
+    Grid(int gridSize, int minObjects, int maxObjects, const std::vector<GridCellType>& objectTypes);
 
     // Destructor
     ~Grid();
 
-    // Generates the grid with random objects
-    void generateGrid(const std::vector<GridCellType>& objectTypes);
-
-    // Returns the ASCII representation of the grid
-    std::string toASCII() const;
+    // Generates the grid dynamically
+    void generateGrid(std::vector<GridCellType>& objectTypes);
 
 private:
-    // Randomly place objects in the grid
-    void dynamicallyGeneratePath(const std::vector<GridCellType>& objectTypes, Pos entry);
 
-    // Randomly choose an entry position outside the grid
+    // Helper functions
+    void initializeGrid();
     Pos getEntryPosition() const;
-
-    // Checks if a position is within the center square of the grid
-    bool isWithinActualGrid(const Pos& pos) const;
-
-    // Moves the ball in a direction until it exits the grid
-    Pos simulateBallPath(const Pos& start, Direction direction);
+    Direction getStartingDirection(const Pos& entryPos);
+    bool isWithinBounds(Pos& pos);
+    std::vector<Pos> findOpenPositions(const Pos& currentPos, Direction currentDirection, const std::set<Pos>& occupied);
+    Pos getNextPosition(const Pos& currentPos, Direction direction);
+    bool isOutOfCenter(const Pos& pos);
+    std::string Grid::toASCII() const;
 };
 
 #endif // GRID_H
