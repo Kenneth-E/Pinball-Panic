@@ -16,21 +16,6 @@ std::string orientationToString(Orientation orientation) {
     }
 }
 
-// Converts the GridCell to a string representation
-std::string GridCell::toString() const {
-    return typeDetails ? typeDetails->toString() : "Unknown";
-}
-
-// Checks if the cell is an activated bumper
-bool GridCell::isActivatedBumper() const {
-    return type == GridCellType::ActivatedBumper;
-}
-
-// Setter for type
-void GridCell::setType(GridCellType newType) {
-    type = newType;
-}
-
 // Setter for position
 void GridCell::setPosition(Pos newPosition) {
     position = newPosition;

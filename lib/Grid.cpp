@@ -111,7 +111,7 @@ void Grid::initializeGrid() {
 
     for (int row = 0; row < gridSize; ++row) {
         for (int col = 0; col < gridSize; ++col) {
-            gridCells[row][col]->setType(GridCellType::Empty);
+            gridCells[row][col] = nullptr;
         }
     }
 }
@@ -128,12 +128,32 @@ std::vector<Orientation> Grid::getViableOrientations(GridCellType type) {
     return viableOrientations;
 }
 
+Direction Grid::getNewDirection(GridCellType type, Direction currentDirection, Orientation orientation, Pos currentPos) {
+    // Retrieve the GridCell at the given position
+    GridCell* cell = gridCells[currentPos.first][currentPos.second];
+    
+    if (!cell) {
+        // If the cell is null, return the current direction
+        return currentDirection;
+    }
+
+    // Get the direction map specific to the cell's type and orientation
+    DirectionMap directionMap = cell  ->getDirectionMap();
+
+    // Find the new direction based on the current direction
+    auto it = directionMap.find(currentDirection);
+    if (it != directionMap.end()) {
+        return it->second; // Return the mapped direction
+    } else {
+        return currentDirection; // Fallback to current direction if not found
+    }
+}
+
 // Generate the grid dynamically
 void Grid::generateGrid(std::vector<GridCellType>& objectTypes) {
     initializeGrid();
-    Pos entryPos = getEntryPosition();
+    entryPos = getEntryPosition();
     Direction startDirection = getStartingDirection(entryPos);
-    gridCells[entryPos.first][entryPos.second]->setType(GridCellType::Entry);
 
     std::set<Pos> occupiedPositions;
     occupiedPositions.insert(entryPos);
@@ -164,8 +184,7 @@ void Grid::generateGrid(std::vector<GridCellType>& objectTypes) {
         occupiedPositions.insert(selectedPos);
         objectsPlaced++;
 
-        // TODO: update direction and position depending on grid cell type
-        currentDirection = getNewDirection(randomType, currentDirection, randomOrientation);
+        currentDirection = getNewDirection(randomType, currentDirection, randomOrientation, selectedPos);
         currentPos = getNextPosition(selectedPos, currentDirection);
     }
 

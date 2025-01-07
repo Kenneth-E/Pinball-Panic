@@ -8,6 +8,9 @@
 // Represents the position of the cell in the grid
 using Pos = std::pair<int, int>;
 
+// Represents the direction map for a cell in the grid
+using DirectionMap = std::unordered_map<Direction, Direction>;
+
 // Enum for Direction
 enum class Direction {
     Up,
@@ -40,66 +43,29 @@ enum class GridCellType {
     Tunnel,
     Teleporter,
     ActivatedBumper,
-    DirectionalBumper,
-    BumperLevelMarker,
-    TunnelLevelMarker,
-    ActivatedBumperLevelMarker,
-    TeleporterLevelMarker,
-    DirectionalBumperLevelMarker
+    DirectionalBumper
 };
-
-// Base class for GridCellType with virtual functions for specific cell behavior
-class GridCellTypeBase {
-public:
-    virtual ~GridCellTypeBase() = default;
-    virtual std::string toString() const = 0;
-};
-
-// Derived classes for specific GridCell types
-class Entry : public GridCellTypeBase {
-    Direction direction;
-public:
-    explicit Entry(Direction dir) : direction(dir) {}
-    std::string toString() const override { return "Entry"; }
-};
-
-class Exit : public GridCellTypeBase {
-    Direction direction;
-public:
-    explicit Exit(Direction dir) : direction(dir) {}
-    std::string toString() const override { return "Exit"; }
-};
-
-// Add other derived classes (Bumper, Tunnel, Teleporter, etc.) similarly...
 
 // Class representing a single cell in the grid
 class GridCell {
+protected:
     Pos position;
     Orientation orientation;
-    GridCellType type;
-    GridCellTypeBase* typeDetails;
 
 public:
-    // Constructor
-    GridCell(Pos pos, GridCellType type, GridCellTypeBase* details = nullptr)
-        : position(std::move(pos)), type(type), typeDetails(details) {}
+    GridCell(const Pos& pos, Orientation orient = Orientation::None)
+        : position(pos), orientation(orient) {}
 
-    // Destructor
-    ~GridCell() { delete typeDetails; }
+    virtual ~GridCell() = default;
 
-    // Getters
+    virtual DirectionMap getDirectionMap() const = 0; // Pure virtual function
+    virtual std::string getType() const = 0;         // Return type as string for ASCII representation
+
+    void setPosition(const Pos& pos) { position = pos; }
+    void setOrientation(Orientation orient) { orientation = orient; }
+
     Pos getPosition() const { return position; }
     Orientation getOrientation() const { return orientation; }
-    GridCellType getType() const { return type; }
-    std::string toString() const;
-
-    // Setter for type
-    void setType(GridCellType newType);
-    void setPosition(Pos newPosition);
-    void setOrientation(Orientation newOrientation);
-
-    // Utility methods
-    bool isActivatedBumper() const;
 };
 
 #endif // GRID_CELL_H

@@ -21,10 +21,11 @@ enum class Direction {
 
 class Grid {
 public:
-    int gridSize;                                 // Size of the grid
-    int minObjects;                               // Minimum number of objects to place
-    int maxObjects;                               // Maximum number of objects to place
-    std::vector<GridCellType> objectTypes;        // Types of grid objects
+    int gridSize;                                  // Size of the grid
+    int minObjects;                                // Minimum number of objects to place
+    int maxObjects;                                // Maximum number of objects to place
+    Pos entryPos;
+    std::vector<GridCellType> objectTypes;         // Types of grid objects
     std::vector<std::vector<GridCell*>> gridCells; // 2D grid of cells
 
     // Constructor
@@ -43,6 +44,7 @@ private:
     Pos getEntryPosition() const;
     Direction getStartingDirection(const Pos& entryPos);
     bool isWithinBounds(Pos& pos);
+    Direction getNewDirection(GridCellType type, Direction currentDirection, Orientation orientation, Pos);
     std::vector<Pos> findOpenPositions(const Pos& currentPos, Direction currentDirection, const std::set<Pos>& occupied);
     std::vector<Orientation> getViableOrientations(GridCellType type);
     Pos getNextPosition(const Pos& currentPos, Direction direction);

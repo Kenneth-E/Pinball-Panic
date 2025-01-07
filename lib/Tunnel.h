@@ -1,30 +1,25 @@
 #ifndef TUNNEL_H
 #define TUNNEL_H
 
-#include "DirectionGenerator.h"
-#include <string>
+#include "GridCell.h"
 
-class Tunnel {
-private:
-    std::string name;
-    Orientation orientation;
-    DirectionMap directionMap;
-
+class Tunnel : public GridCell {
 public:
-    // Constructor
-    Tunnel(const std::string& name, Orientation orientation);
+    Tunnel(const Pos& pos, Orientation orient = Orientation::None)
+        : GridCell(pos, orient) {}
 
-    // Get the name of the bumper
-    std::string getName() const;
+    DirectionMap getDirectionMap() const override {
+        return {
+            {Direction::Up, Direction::Down},
+            {Direction::Down, Direction::Up},
+            {Direction::Left, Direction::Right},
+            {Direction::Right, Direction::Left}
+        };
+    }
 
-    // Get the orientation of the bumper
-    Orientation getOrientation() const;
-
-    // Get the direction map
-    DirectionMap getDirectionMap() const;
-
-    // Print the direction map
-    void printDirectionMap() const;
+    std::string getType() const override {
+        return "T";
+    }
 };
 
 #endif // TUNNEL_H

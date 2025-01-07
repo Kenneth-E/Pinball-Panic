@@ -1,30 +1,25 @@
 #ifndef BUMPER_H
 #define BUMPER_H
 
-#include "DirectionGenerator.h"
-#include <string>
+#include "GridCell.h"
 
-class Bumper {
-private:
-    std::string name;
-    Orientation orientation;
-    DirectionMap directionMap;
-
+class Bumper : public GridCell {
 public:
-    // Constructor
-    Bumper(const std::string& name, Orientation orientation);
+    Bumper(const Pos& pos, Orientation orient = Orientation::None)
+        : GridCell(pos, orient) {}
 
-    // Get the name of the bumper
-    std::string getName() const;
+    DirectionMap getDirectionMap() const override {
+        return {
+            {Direction::Up, Direction::Right},
+            {Direction::Down, Direction::Left},
+            {Direction::Left, Direction::Down},
+            {Direction::Right, Direction::Up}
+        };
+    }
 
-    // Get the orientation of the bumper
-    Orientation getOrientation() const;
-
-    // Get the direction map
-    DirectionMap getDirectionMap() const;
-
-    // Print the direction map
-    void printDirectionMap() const;
+    std::string getType() const override {
+        return "B";
+    }
 };
 
 #endif // BUMPER_H
