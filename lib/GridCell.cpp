@@ -26,7 +26,17 @@ bool GridCell::isActivatedBumper() const {
     return type == GridCellType::ActivatedBumper;
 }
 
-// Checks if the cell is a teleporter marker
-bool GridCell::isTeleporterMarker() const {
-    return type == GridCellType::TeleporterLevelMarker;
+// Setter for type
+void GridCell::setType(GridCellType newType) {
+    type = newType;
+}
+
+// Setter for position
+void GridCell::setPosition(Pos newPosition) {
+    position = newPosition;
+}
+
+// Setter for orientation
+void GridCell::setOrientation(Orientation newOrientation) {
+    orientation = newOrientation;
 }

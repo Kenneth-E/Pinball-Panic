@@ -116,6 +116,18 @@ void Grid::initializeGrid() {
     }
 }
 
+// Select random orientation dependent on the grid cell type
+std::vector<Orientation> Grid::getViableOrientations(GridCellType type) {
+    std::vector<Orientation> viableOrientations;
+    switch (type) {
+        // TODO: add rest of orientations
+        case GridCellType::Bumper: viableOrientations.insert(viableOrientations.end(), {Orientation::UpRight, Orientation::DownRight});
+        case GridCellType::ActivatedBumper: viableOrientations.insert(viableOrientations.end(), {Orientation::UpRight, Orientation::DownRight});
+        case GridCellType::Teleporter: viableOrientations.insert(viableOrientations.end(), {Orientation::None});
+    }
+    return viableOrientations;
+}
+
 // Generate the grid dynamically
 void Grid::generateGrid(std::vector<GridCellType>& objectTypes) {
     initializeGrid();
@@ -144,13 +156,15 @@ void Grid::generateGrid(std::vector<GridCellType>& objectTypes) {
 
         Pos selectedPos = openPositions[std::rand() % openPositions.size()];
         GridCellType randomType = objectTypes[std::rand() % objectTypes.size()];
-        Orientation randomOrientation = getRandomOrientation(randomType);
+        std::vector<Orientation> viableOrientations = getViableOrientations(randomType);
+        Orientation randomOrientation = viableOrientations[std::rand() % viableOrientations.size()];
 
         gridCells[selectedPos.first][selectedPos.second]->setType(randomType);
         gridCells[selectedPos.first][selectedPos.second]->setOrientation(randomOrientation);
         occupiedPositions.insert(selectedPos);
         objectsPlaced++;
 
+        // TODO: update direction and position depending on grid cell type
         currentDirection = getNewDirection(randomType, currentDirection, randomOrientation);
         currentPos = getNextPosition(selectedPos, currentDirection);
     }

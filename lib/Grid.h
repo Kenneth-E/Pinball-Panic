@@ -44,6 +44,7 @@ private:
     Direction getStartingDirection(const Pos& entryPos);
     bool isWithinBounds(Pos& pos);
     std::vector<Pos> findOpenPositions(const Pos& currentPos, Direction currentDirection, const std::set<Pos>& occupied);
+    std::vector<Orientation> getViableOrientations(GridCellType type);
     Pos getNextPosition(const Pos& currentPos, Direction direction);
     bool isOutOfCenter(const Pos& pos);
     std::string Grid::toASCII() const;

@@ -75,6 +75,7 @@ public:
 // Class representing a single cell in the grid
 class GridCell {
     Pos position;
+    Orientation orientation;
     GridCellType type;
     GridCellTypeBase* typeDetails;
 
@@ -88,12 +89,17 @@ public:
 
     // Getters
     Pos getPosition() const { return position; }
+    Orientation getOrientation() const { return orientation; }
     GridCellType getType() const { return type; }
     std::string toString() const;
 
+    // Setter for type
+    void setType(GridCellType newType);
+    void setPosition(Pos newPosition);
+    void setOrientation(Orientation newOrientation);
+
     // Utility methods
     bool isActivatedBumper() const;
-    bool isTeleporterMarker() const;
 };
 
 #endif // GRID_CELL_H
