@@ -9,17 +9,7 @@
 // Constructor
 Grid::Grid(int size, int minObjects, int maxObjects, const std::vector<GridCellType>& objectTypes)
     : gridSize(size), minObjects(minObjects), maxObjects(maxObjects) {
-    gridCells.resize(gridSize, std::vector<GridCell*>(gridSize, nullptr));
-    std::srand(std::time(nullptr)); // Seed for randomness
-}
-
-// Destructor
-Grid::~Grid() {
-    for (auto& row : gridCells) {
-        for (auto& cell : row) {
-            delete cell;
-        }
-    }
+    gridCells.resize(gridSize, std::vector<GridCell>(gridSize));
 }
 
 // Get the starting direction based on entry position
@@ -42,7 +32,7 @@ std::vector<Pos> Grid::findOpenPositions(const Pos& currentPos, Direction curren
 
     while (isWithinBounds(nextPos)) {
         if (occupied.find(nextPos) == occupied.end() &&
-            gridCells[nextPos.first][nextPos.second]->getType() == GridCellType::Empty) {
+            gridCells[nextPos.first][nextPos.second].type == GridCellType::Empty) {
             openPositions.push_back(nextPos);
         }
         nextPos = getNextPosition(nextPos, currentDirection);
@@ -81,10 +71,10 @@ std::string Grid::toASCII() const {
 
     for (int i = 0; i < gridSize; ++i) {
         for (int j = 0; j < gridSize; ++j) {
-            if (!gridCells[i][j]) {
-                oss << ". ";
+            if (gridCells[i][j].type == GridCellType::Entry) {
+                oss << "E ";
             } else {
-                switch (gridCells[i][j]->getType()) {
+                switch (gridCells[i][j].type) {
                     case GridCellType::Entry:              oss << "E "; break;
                     case GridCellType::Exit:               oss << "X "; break;
                     case GridCellType::Empty:              oss << ". "; break;
@@ -107,13 +97,7 @@ std::string Grid::toASCII() const {
 // Initialize the grid
 void Grid::initializeGrid() {
     gridCells.clear();
-    gridCells.resize(gridSize, std::vector<GridCell*>(gridSize));
-
-    for (int row = 0; row < gridSize; ++row) {
-        for (int col = 0; col < gridSize; ++col) {
-            gridCells[row][col] = nullptr;
-        }
-    }
+    gridCells.resize(gridSize, std::vector<GridCell>(gridSize));
 }
 
 // Select random orientation dependent on the grid cell type
@@ -129,24 +113,12 @@ std::vector<Orientation> Grid::getViableOrientations(GridCellType type) {
 }
 
 Direction Grid::getNewDirection(GridCellType type, Direction currentDirection, Orientation orientation, Pos currentPos) {
-    // Retrieve the GridCell at the given position
-    GridCell* cell = gridCells[currentPos.first][currentPos.second];
+    // Access GridCell directly, not as a pointer
+    const GridCell& cell = gridCells[currentPos.first][currentPos.second];
     
-    if (!cell) {
-        // If the cell is null, return the current direction
-        return currentDirection;
-    }
-
-    // Get the direction map specific to the cell's type and orientation
-    DirectionMap directionMap = cell  ->getDirectionMap();
-
-    // Find the new direction based on the current direction
-    auto it = directionMap.find(currentDirection);
-    if (it != directionMap.end()) {
-        return it->second; // Return the mapped direction
-    } else {
-        return currentDirection; // Fallback to current direction if not found
-    }
+    // Use the cell's properties directly
+    // TODO: Implement direction logic based on cell.type, cell.direction, and cell.orientation
+    return currentDirection;
 }
 
 // Generate the grid dynamically
@@ -162,16 +134,12 @@ void Grid::generateGrid(std::vector<GridCellType>& objectTypes) {
     Pos currentPos = entryPos;
     Direction currentDirection = startDirection;
 
-    while (objectsPlaced < minObjects || objectsPlaced < maxObjects) {
+    while (objectsPlaced < minObjects) {
         std::vector<Pos> openPositions = findOpenPositions(currentPos, currentDirection, occupiedPositions);
 
         if (openPositions.empty()) {
-            if (isOutOfCenter(currentPos)) {
-                generateGrid(objectTypes);
-                return;
-            }
-            currentPos = getNextPosition(currentPos, currentDirection);
-            continue;
+            generateGrid(objectTypes);
+            return;
         }
 
         Pos selectedPos = openPositions[std::rand() % openPositions.size()];
@@ -179,19 +147,20 @@ void Grid::generateGrid(std::vector<GridCellType>& objectTypes) {
         std::vector<Orientation> viableOrientations = getViableOrientations(randomType);
         Orientation randomOrientation = viableOrientations[std::rand() % viableOrientations.size()];
 
-        gridCells[selectedPos.first][selectedPos.second]->setType(randomType);
-        gridCells[selectedPos.first][selectedPos.second]->setOrientation(randomOrientation);
+        gridCells[selectedPos.first][selectedPos.second].type = randomType;
+        gridCells[selectedPos.first][selectedPos.second].orientation = randomOrientation;
         occupiedPositions.insert(selectedPos);
-        objectsPlaced++;
+        ++objectsPlaced;
 
         currentDirection = getNewDirection(randomType, currentDirection, randomOrientation, selectedPos);
-        currentPos = getNextPosition(selectedPos, currentDirection);
+        // TODO: add case for teleporter
+        currentPos = selectedPos;
     }
 
     while (!isOutOfCenter(currentPos)) {
         currentPos = getNextPosition(currentPos, currentDirection);
     }
-    gridCells[currentPos.first][currentPos.second]->setType(GridCellType::Exit);
+    gridCells[currentPos.first][currentPos.second].type = GridCellType::Exit;
 
     std::cout << toASCII() << std::endl;
 }

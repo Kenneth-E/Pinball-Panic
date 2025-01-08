@@ -26,10 +26,15 @@ public:
     int maxObjects;                                // Maximum number of objects to place
     Pos entryPos;
     std::vector<GridCellType> objectTypes;         // Types of grid objects
-    std::vector<std::vector<GridCell*>> gridCells; // 2D grid of cells
+    std::vector<std::vector<GridCell>> gridCells;   // 2D vector of GridCells
 
     // Constructor
-    Grid(int gridSize, int minObjects, int maxObjects, const std::vector<GridCellType>& objectTypes);
+    Grid(int size, int minObjects, int maxObjects, const std::vector<GridCellType>& objectTypes)
+        : gridSize(size)
+        , minObjects(minObjects)
+        , maxObjects(maxObjects) {
+        gridCells.resize(gridSize, std::vector<GridCell>(gridSize));
+    }
 
     // Destructor
     ~Grid();

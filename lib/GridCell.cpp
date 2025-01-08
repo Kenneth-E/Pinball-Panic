@@ -15,13 +15,3 @@ std::string orientationToString(Orientation orientation) {
         default: throw std::invalid_argument("Unknown orientation");
     }
 }
-
-// Setter for position
-void GridCell::setPosition(Pos newPosition) {
-    position = newPosition;
-}
-
-// Setter for orientation
-void GridCell::setOrientation(Orientation newOrientation) {
-    orientation = newOrientation;
-}
