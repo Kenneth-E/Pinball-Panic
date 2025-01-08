@@ -1,21 +1,13 @@
 #include "../lib/GridCell.h"
+#include "../lib/Grid.h"
 #include <iostream>
 
 int main() {
-    // Create an Entry cell
-    GridCell entryCell({0, 0}, GridCellType::Entry, new Entry(Direction::Up));
+    // Create a grid
+    Grid grid(10, 10, 10, {GridCellType::Bumper, GridCellType::DirectionalBumper, GridCellType::Tunnel});
 
-    // Print details
-    std::cout << "Cell position: (" << entryCell.getPosition().first << ", " 
-              << entryCell.getPosition().second << ")\n";
-    std::cout << "Cell type: " << entryCell.toString() << "\n";
-
-    // Check specific cell types
-    if (entryCell.isActivatedBumper()) {
-        std::cout << "This is an activated bumper.\n";
-    } else {
-        std::cout << "This is not an activated bumper.\n";
-    }
+    // Print the grid
+    std::cout << grid.toASCII() << std::endl;
 
     return 0;
 }

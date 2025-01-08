@@ -21,11 +21,11 @@ enum class Direction {
 
 class Grid {
 public:
-    int gridSize;                                  // Size of the grid
-    int minObjects;                                // Minimum number of objects to place
-    int maxObjects;                                // Maximum number of objects to place
+    int gridSize;                                   // Size of the grid
+    int minObjects;                                 // Minimum number of objects to place
+    int maxObjects;                                 // Maximum number of objects to place
     Pos entryPos;
-    std::vector<GridCellType> objectTypes;         // Types of grid objects
+    std::vector<GridCellType> objectTypes;          // Types of grid objects
     std::vector<std::vector<GridCell>> gridCells;   // 2D vector of GridCells
 
     // Constructor
@@ -42,6 +42,8 @@ public:
     // Generates the grid dynamically
     void generateGrid(std::vector<GridCellType>& objectTypes);
 
+    std::string toASCII() const;
+
 private:
 
     // Helper functions
@@ -51,10 +53,9 @@ private:
     bool isWithinBounds(Pos& pos);
     Direction getNewDirection(GridCellType type, Direction currentDirection, Orientation orientation, Pos);
     std::vector<Pos> findOpenPositions(const Pos& currentPos, Direction currentDirection, const std::set<Pos>& occupied);
-    std::vector<Orientation> getViableOrientations(GridCellType type);
+    Orientation getViableOrientation(GridCellType type);
     Pos getNextPosition(const Pos& currentPos, Direction direction);
     bool isOutOfCenter(const Pos& pos);
-    std::string Grid::toASCII() const;
 };
 
 #endif // GRID_H
