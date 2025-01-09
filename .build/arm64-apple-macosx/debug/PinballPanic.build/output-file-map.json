@@ -1,0 +1,23 @@
+{
+  "": {
+    "swift-dependencies": "/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/PinballPanic.build/master.swiftdeps"
+  },
+  "/Users/kennethelsman/Desktop/Pinball-Panic/Sources/PinballPanic/GridBridge.swift": {
+    "dependencies": "/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/PinballPanic.build/GridBridge.d",
+    "object": "/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/PinballPanic.build/GridBridge.swift.o",
+    "swiftmodule": "/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/PinballPanic.build/GridBridge~partial.swiftmodule",
+    "swift-dependencies": "/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/PinballPanic.build/GridBridge.swiftdeps"
+  },
+  "/Users/kennethelsman/Desktop/Pinball-Panic/Sources/PinballPanic/Views/GridView.swift": {
+    "dependencies": "/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/PinballPanic.build/GridView.d",
+    "object": "/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/PinballPanic.build/GridView.swift.o",
+    "swiftmodule": "/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/PinballPanic.build/GridView~partial.swiftmodule",
+    "swift-dependencies": "/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/PinballPanic.build/GridView.swiftdeps"
+  },
+  "/Users/kennethelsman/Desktop/Pinball-Panic/Sources/PinballPanic/main.swift": {
+    "dependencies": "/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/PinballPanic.build/main.d",
+    "object": "/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/PinballPanic.build/main.swift.o",
+    "swiftmodule": "/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/PinballPanic.build/main~partial.swiftmodule",
+    "swift-dependencies": "/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/PinballPanic.build/main.swiftdeps"
+  }
+}

@@ -1,0 +1,256 @@
+{
+  "builtTestProducts" : [
+
+  ],
+  "copyCommands" : {
+
+  },
+  "explicitTargetDependencyImportCheckingMode" : {
+    "none" : {
+
+    }
+  },
+  "generatedSourceTargetSet" : [
+
+  ],
+  "pluginDescriptions" : [
+
+  ],
+  "swiftCommands" : {
+    "C.PinballPanic-debug.module" : {
+      "executable" : "/Library/Developer/CommandLineTools/usr/bin/swiftc",
+      "fileList" : "/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/PinballPanic.build/sources",
+      "importPath" : "/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug",
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/kennethelsman/Desktop/Pinball-Panic/Sources/PinballPanic/GridBridge.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/kennethelsman/Desktop/Pinball-Panic/Sources/PinballPanic/Views/GridView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/kennethelsman/Desktop/Pinball-Panic/Sources/PinballPanic/main.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/swift-version--1AB21518FC5DEDBE.txt"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/PinballPanic.build/sources"
+        }
+      ],
+      "isLibrary" : false,
+      "moduleName" : "PinballPanic",
+      "moduleOutputPath" : "/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/PinballPanic.swiftmodule",
+      "objects" : [
+        "/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/PinballPanic.build/GridBridge.swift.o",
+        "/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/PinballPanic.build/GridView.swift.o",
+        "/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/PinballPanic.build/main.swift.o"
+      ],
+      "otherArguments" : [
+        "-target",
+        "arm64-apple-macosx13.0",
+        "-swift-version",
+        "5",
+        "-enable-batch-mode",
+        "-index-store-path",
+        "/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/index/store",
+        "-Onone",
+        "-enable-testing",
+        "-j8",
+        "-DSWIFT_PACKAGE",
+        "-DDEBUG",
+        "-module-cache-path",
+        "/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/ModuleCache",
+        "-parseable-output",
+        "-Xfrontend",
+        "-entry-point-function-name",
+        "-Xfrontend",
+        "PinballPanic_main",
+        "-color-diagnostics",
+        "-sdk",
+        "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk",
+        "-g",
+        "-Xcc",
+        "-isysroot",
+        "-Xcc",
+        "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk",
+        "-Xcc",
+        "-fPIC",
+        "-Xcc",
+        "-g",
+        "-package-name",
+        "pinball_panic"
+      ],
+      "outputFileMapPath" : "/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/PinballPanic.build/output-file-map.json",
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/PinballPanic.build/GridBridge.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/PinballPanic.build/GridView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/PinballPanic.build/main.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/PinballPanic.swiftmodule"
+        }
+      ],
+      "sources" : [
+        "/Users/kennethelsman/Desktop/Pinball-Panic/Sources/PinballPanic/GridBridge.swift",
+        "/Users/kennethelsman/Desktop/Pinball-Panic/Sources/PinballPanic/Views/GridView.swift",
+        "/Users/kennethelsman/Desktop/Pinball-Panic/Sources/PinballPanic/main.swift"
+      ],
+      "tempsPath" : "/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/PinballPanic.build",
+      "wholeModuleOptimization" : false
+    }
+  },
+  "swiftFrontendCommands" : {
+
+  },
+  "swiftTargetScanArgs" : {
+    "PinballPanic" : [
+      "/Library/Developer/CommandLineTools/usr/bin/swiftc",
+      "-module-name",
+      "PinballPanic",
+      "-package-name",
+      "pinball_panic",
+      "-incremental",
+      "-c",
+      "/Users/kennethelsman/Desktop/Pinball-Panic/Sources/PinballPanic/GridBridge.swift",
+      "/Users/kennethelsman/Desktop/Pinball-Panic/Sources/PinballPanic/Views/GridView.swift",
+      "/Users/kennethelsman/Desktop/Pinball-Panic/Sources/PinballPanic/main.swift",
+      "-I",
+      "/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug",
+      "-target",
+      "arm64-apple-macosx13.0",
+      "-swift-version",
+      "5",
+      "-enable-batch-mode",
+      "-index-store-path",
+      "/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/index/store",
+      "-Onone",
+      "-enable-testing",
+      "-j8",
+      "-DSWIFT_PACKAGE",
+      "-DDEBUG",
+      "-module-cache-path",
+      "/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/ModuleCache",
+      "-parseable-output",
+      "-Xfrontend",
+      "-entry-point-function-name",
+      "-Xfrontend",
+      "PinballPanic_main",
+      "-color-diagnostics",
+      "-sdk",
+      "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk",
+      "-g",
+      "-Xcc",
+      "-isysroot",
+      "-Xcc",
+      "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk",
+      "-Xcc",
+      "-fPIC",
+      "-Xcc",
+      "-g",
+      "-package-name",
+      "pinball_panic",
+      "-driver-use-frontend-path",
+      "/Library/Developer/CommandLineTools/usr/bin/swiftc"
+    ]
+  },
+  "targetDependencyMap" : {
+    "PinballPanic" : [
+
+    ]
+  },
+  "testDiscoveryCommands" : {
+
+  },
+  "testEntryPointCommands" : {
+
+  },
+  "writeCommands" : {
+    "/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/PinballPanic-entitlement.plist" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<entitlement-plist>"
+        },
+        {
+          "kind" : "virtual",
+          "name" : "<com.apple.security.get-task-allow>"
+        }
+      ],
+      "outputFilePath" : "/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/PinballPanic-entitlement.plist"
+    },
+    "/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/PinballPanic.build/sources" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<sources-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/kennethelsman/Desktop/Pinball-Panic/Sources/PinballPanic/GridBridge.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/kennethelsman/Desktop/Pinball-Panic/Sources/PinballPanic/Views/GridView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/kennethelsman/Desktop/Pinball-Panic/Sources/PinballPanic/main.swift"
+        }
+      ],
+      "outputFilePath" : "/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/PinballPanic.build/sources"
+    },
+    "/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/PinballPanic.product/Objects.LinkFileList" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<link-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/PinballPanic.build/GridBridge.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/PinballPanic.build/GridView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/PinballPanic.build/main.swift.o"
+        }
+      ],
+      "outputFilePath" : "/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/PinballPanic.product/Objects.LinkFileList"
+    },
+    "/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/swift-version--1AB21518FC5DEDBE.txt" : {
+      "alwaysOutOfDate" : true,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<swift-get-version>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Library/Developer/CommandLineTools/usr/bin/swiftc"
+        }
+      ],
+      "outputFilePath" : "/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/swift-version--1AB21518FC5DEDBE.txt"
+    }
+  }
+}

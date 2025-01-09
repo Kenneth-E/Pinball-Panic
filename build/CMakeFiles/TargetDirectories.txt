@@ -1,0 +1,3 @@
+/Users/kennethelsman/Desktop/Pinball-Panic/build/CMakeFiles/GridBridge.dir
+/Users/kennethelsman/Desktop/Pinball-Panic/build/CMakeFiles/edit_cache.dir
+/Users/kennethelsman/Desktop/Pinball-Panic/build/CMakeFiles/rebuild_cache.dir

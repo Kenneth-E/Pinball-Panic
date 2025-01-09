@@ -8,14 +8,16 @@
 #include "Grid.h"
 #include "DirectionMaps.h"
 
-// Constructor
+// Constructor implementation
 Grid::Grid(int size, int minObjects, int maxObjects, const std::vector<GridCellType>& objectTypes)
-    : gridSize(size), minObjects(minObjects), maxObjects(maxObjects) {
+    : gridSize(size)
+    , minObjects(minObjects)
+    , maxObjects(maxObjects) {
     gridCells.resize(gridSize, std::vector<GridCell>(gridSize));
 }
 
 // Get the starting direction based on entry position
-Direction Grid::getStartingDirection(const Pos& entryPos) {
+Direction Grid::getStartingDirection(const Pos& entryPos) const{
     if (entryPos.first == 0) return Direction::Down;   // Top edge
     if (entryPos.first == gridSize - 1) return Direction::Up; // Bottom edge
     if (entryPos.second == 0) return Direction::Right; // Left edge
@@ -23,12 +25,12 @@ Direction Grid::getStartingDirection(const Pos& entryPos) {
 }
 
 // Check if a position is within the grid bounds
-bool Grid::isWithinBounds(Pos& pos) {
+bool Grid::isWithinBounds(const Pos& pos) const {
     return (pos.first >= 0 && pos.first < gridSize) && (pos.second >= 0 && pos.second < gridSize);
 }
 
 // Find open positions along the ball's path
-std::vector<Pos> Grid::findOpenPositions(const Pos& currentPos, Direction currentDirection, const std::set<Pos>& occupied) {
+std::vector<Pos> Grid::findOpenPositions(const Pos& currentPos, Direction currentDirection, const std::set<Pos>& occupied) const{
     std::vector<Pos> openPositions;
     Pos nextPos = getNextPosition(currentPos, currentDirection);
 
@@ -44,7 +46,7 @@ std::vector<Pos> Grid::findOpenPositions(const Pos& currentPos, Direction curren
 }
 
 // Calculate the next position based on the current direction
-Pos Grid::getNextPosition(const Pos& currentPos, Direction direction) {
+Pos Grid::getNextPosition(const Pos& currentPos, Direction direction) const{
     switch (direction) {
         case Direction::Up:    return {currentPos.first - 1, currentPos.second};
         case Direction::Down:  return {currentPos.first + 1, currentPos.second};
@@ -94,7 +96,7 @@ std::string Grid::toASCII() const {
                     if (cellOrientation == Orientation::UpRight) {
                         oss << "/ ";
                     } else if (cellOrientation == Orientation::DownRight) {
-                        oss << "\ ";
+                        oss << "\\ ";
                     }
                     break;
 
@@ -113,7 +115,7 @@ std::string Grid::toASCII() const {
                     if (cellOrientation == Orientation::UpRight) {
                         oss << "a/ ";
                     } else if (cellOrientation == Orientation::DownRight) {
-                        oss << "a\ ";
+                        oss << "a\\ ";
                     }
                     break;
 
@@ -145,7 +147,7 @@ void Grid::initializeGrid() {
 }
 
 // Select random orientation dependent on the grid cell type
-Orientation Grid::getViableOrientation(GridCellType type) {
+Orientation Grid::getViableOrientation(GridCellType type) const{
     std::vector<Orientation> viableOrientations;
     switch (type) {
         case GridCellType::Tunnel: 
@@ -163,7 +165,7 @@ Orientation Grid::getViableOrientation(GridCellType type) {
     return viableOrientations[std::rand() % viableOrientations.size()];
 }
 
-Direction Grid::getNewDirection(GridCellType type, Direction currentDirection, Orientation orientation, Pos currentPos) {
+Direction Grid::getNewDirection(GridCellType type, Direction currentDirection, Orientation orientation, const Pos& currentPos) const {
     auto typeIt = DirectionMaps::directionMaps.find(type);
     if (typeIt != DirectionMaps::directionMaps.end()) {
         auto orientIt = typeIt->second.find(orientation);
@@ -249,4 +251,16 @@ void Grid::generateGrid(std::vector<GridCellType>& objectTypes) {
         currentPos = getNextPosition(currentPos, currentDirection);
     }
     gridCells[currentPos.first][currentPos.second].type = GridCellType::Exit;
+}
+
+// Check if a position is out of the center region of the grid
+bool Grid::isOutOfCenter(const Pos& pos) const {
+    // Define the center region as the middle 60% of the grid
+    int borderSize = gridSize * 0.2; // 20% border on each side
+    
+    // Check if position is in the border area
+    return pos.first < borderSize || 
+           pos.first >= gridSize - borderSize ||
+           pos.second < borderSize || 
+           pos.second >= gridSize - borderSize;
 }

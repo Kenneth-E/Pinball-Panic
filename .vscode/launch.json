@@ -1,0 +1,22 @@
+{
+    "configurations": [
+        {
+            "type": "lldb",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:Pinball-Panic}",
+            "name": "Debug PinballPanic",
+            "program": "${workspaceFolder:Pinball-Panic}/.build/debug/PinballPanic",
+            "preLaunchTask": "swift: Build Debug PinballPanic"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:Pinball-Panic}",
+            "name": "Release PinballPanic",
+            "program": "${workspaceFolder:Pinball-Panic}/.build/release/PinballPanic",
+            "preLaunchTask": "swift: Build Release PinballPanic"
+        }
+    ]
+}
