@@ -17,6 +17,24 @@
             "name": "Release PinballPanic",
             "program": "${workspaceFolder:Pinball-Panic}/.build/release/PinballPanic",
             "preLaunchTask": "swift: Build Release PinballPanic"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:Pinball-Panic}",
+            "name": "Debug GridTests",
+            "program": "${workspaceFolder:Pinball-Panic}/.build/debug/GridTests",
+            "preLaunchTask": "swift: Build Debug GridTests"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:Pinball-Panic}",
+            "name": "Release GridTests",
+            "program": "${workspaceFolder:Pinball-Panic}/.build/release/GridTests",
+            "preLaunchTask": "swift: Build Release GridTests"
         }
     ]
 }

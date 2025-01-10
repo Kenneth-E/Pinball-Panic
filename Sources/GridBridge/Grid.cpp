@@ -58,7 +58,7 @@ std::vector<Pos> Grid::findOpenPositions(const Pos& currentPos, Direction curren
         return openPositionsInDirection;
     }
 
-    while (isWithinBounds(nextPos)) {
+    while (isWithinCenter(nextPos)) {
         std::cout << "Checking position (" << nextPos.first << "," << nextPos.second << ")" << std::endl;
         
         if (openPositions.find(nextPos) != openPositions.end()) {
@@ -102,10 +102,10 @@ Pos Grid::getNextPosition(const Pos& currentPos, Direction direction) const {
 // Get a random entry position on the edge of the grid, excluding the corners
 Pos Grid::getEntryPosition() const {
     int side = std::rand() % 4;
-    int pos = std::rand() % (gridSize - 2) + 1;
+    int pos = (std::rand() % (gridSize - 2)) + 1;
 
     switch (side) {
-        case 0: return {0 , pos};               // Top edge
+        case 0: return {0, pos};               // Top edge
         case 1: return {gridSize - 1, pos};    // Bottom edge
         case 2: return {pos, 0};              // Left edge
         default: return {pos, gridSize - 1};  // Right edge
@@ -201,7 +201,7 @@ void Grid::initializeGrid() {
 }
 
 // Select random orientation dependent on the grid cell type
-Orientation Grid::getViableOrientation(GridCellType type) const{
+Orientation Grid::getViableOrientation(GridCellType type) const {
     std::vector<Orientation> viableOrientations;
     switch (type) {
         case GridCellType::Tunnel: 
@@ -211,6 +211,9 @@ Orientation Grid::getViableOrientation(GridCellType type) const{
             viableOrientations = {Orientation::TopLeft, Orientation::TopRight, Orientation::BottomLeft, Orientation::BottomRight};
             break;
         case GridCellType::Bumper: 
+            viableOrientations = {Orientation::UpRight, Orientation::DownRight};
+            break;
+        case GridCellType::ActivatedBumper: 
             viableOrientations = {Orientation::UpRight, Orientation::DownRight};
             break;
         default:
@@ -237,9 +240,9 @@ void Grid::initializeOpenPositions() {
     openPositions.clear();
     occupiedPositions.clear();
     
-    // Add all valid positions to openPositions
-    for (int i = 0; i < gridSize; i++) {
-        for (int j = 0; j < gridSize; j++) {
+    // Add all valid positions within center of grid to openPositions
+    for (int i = 1; i < gridSize - 1; i++) {
+        for (int j = 1; j < gridSize - 1; j++) {
             openPositions.insert({i, j});
         }
     }
@@ -274,7 +277,7 @@ void Grid::generateGrid(std::vector<GridCellType>& objectTypes, int attempt) {
         // If there are no open positions, restart
         if (openPositions.empty()) {
             std::cout << "No open positions found - restarting grid generation" << std::endl;
-            generateGrid(objectTypes);
+            generateGrid(objectTypes, attempt + 1);
             return;
         }
         

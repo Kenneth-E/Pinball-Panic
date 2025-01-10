@@ -34,7 +34,7 @@ struct GridView: View {
             case .entry: return "E"
             case .exit: return "X"
             case .bumper(let o): return o == .upRight ? "╱" : "╲"
-            case .tunnel(let o): return o == .horizontal ? "=" : "│"
+            case .tunnel(let o): return o == .horizontal ? "=" : "││"
             case .teleporter: return "*"
             case .directionalBumper(let o): 
                 switch o {

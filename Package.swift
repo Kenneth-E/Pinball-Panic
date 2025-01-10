@@ -19,6 +19,15 @@ let package = Package(
                 .headerSearchPath("."),
                 .headerSearchPath("include")
             ]
+        ),
+        .executableTarget(
+            name: "GridTests",
+            dependencies: ["GridBridge"],
+            path: "Tests",
+            cxxSettings: [
+                .headerSearchPath("../Sources/GridBridge"),
+                .headerSearchPath(".")
+            ]
         )
     ],
     cxxLanguageStandard: .cxx17

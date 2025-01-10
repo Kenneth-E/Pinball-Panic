@@ -43,7 +43,11 @@ extern "C" {
             std::cout.flush();
             
             std::vector<GridCellType> objects = {
-                GridCellType::Bumper
+                GridCellType::Bumper,
+                GridCellType::DirectionalBumper,
+                GridCellType::Tunnel,
+                GridCellType::Teleporter,
+                GridCellType::ActivatedBumper
             };
             
             std::cout << "C++: About to call grid->generateGrid..." << std::endl;
