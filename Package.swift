@@ -4,14 +4,20 @@ import PackageDescription
 let package = Package(
     name: "PinballPanic",
     platforms: [.macOS(.v13)],
+    products: [
+        .executable(name: "PinballPanic", targets: ["PinballPanic"]),
+    ],
     targets: [
         .executableTarget(
             name: "PinballPanic",
-            path: "Sources/PinballPanic",
-            linkerSettings: [
-                .linkedLibrary("GridBridge"),
-                .unsafeFlags(["-L", "./build", "-Xlinker", "-rpath", "-Xlinker", "@executable_path/../build"])
+            dependencies: ["GridBridge"]
+        ),
+        .target(
+            name: "GridBridge",
+            cxxSettings: [
+                .headerSearchPath(".")
             ]
         )
-    ]
+    ],
+    cxxLanguageStandard: .cxx17
 ) 

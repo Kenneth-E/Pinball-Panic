@@ -4,7 +4,7 @@
 
 int main() {
     // Create a grid
-    Grid grid(10, 10, 10, {GridCellType::Bumper, GridCellType::DirectionalBumper, GridCellType::Tunnel});
+    Grid grid(5, 10, 10, {GridCellType::Bumper, GridCellType::DirectionalBumper, GridCellType::Tunnel});
 
     // Print the grid
     std::cout << grid.toASCII() << std::endl;
