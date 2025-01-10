@@ -1,0 +1,4 @@
+module GridBridge {
+    umbrella header "/Users/kennethelsman/Desktop/Pinball-Panic/Sources/GridBridge/include/GridBridge.h"
+    export *
+}

@@ -1,0 +1,7 @@
+version: "Apple Swift version 5.10 (swiftlang-5.10.0.13 clang-1500.3.9.4)"
+options: "f4821f09bd517cdd393880621e587b43"
+build_time: [1736492672, 308928000]
+inputs:
+  "/Users/kennethelsman/Desktop/Pinball-Panic/Sources/PinballPanic/GridBridge.swift": [1736490791, 978699582]
+  "/Users/kennethelsman/Desktop/Pinball-Panic/Sources/PinballPanic/Views/GridView.swift": [1736490586, 767650921]
+  "/Users/kennethelsman/Desktop/Pinball-Panic/Sources/PinballPanic/main.swift": [1736463271, 304250578]

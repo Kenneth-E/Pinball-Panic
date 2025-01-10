@@ -1,5 +1,7 @@
 import Foundation
 
+typealias Pos = (Int32, Int32)
+
 enum GridCellType: Int {
     case empty = 0
     case entry = 1

@@ -18,6 +18,8 @@ public:
     Pos entryPos;
     std::vector<GridCellType> objectTypes;          
     std::vector<std::vector<GridCell>> gridCells;   
+    std::set<Pos> openPositions;  // New member to track open positions
+    std::set<Pos> occupiedPositions;  // New member to track occupied positions
 
     // Constructor declaration only
     Grid(int size, int minObjects, int maxObjects, const std::vector<GridCellType>& objectTypes);
@@ -39,11 +41,13 @@ private:
     bool isWithinBounds(const Pos& pos) const;
     Direction getNewDirection(GridCellType type, Direction currentDirection, 
                             Orientation orientation, const Pos& pos) const;
-    std::vector<Pos> findOpenPositions(const Pos& currentPos, Direction currentDirection, 
-                                     const std::set<Pos>& occupied) const;
+    std::vector<Pos> findOpenPositions(const Pos& currentPos, Direction currentDirection);
     Orientation getViableOrientation(GridCellType type) const;
     Pos getNextPosition(const Pos& currentPos, Direction direction) const;
-    bool isOutOfCenter(const Pos& pos) const;
+    bool isWithinCenter(const Pos& pos) const;
+    void initializeOpenPositions();  // New helper function
+    void updateOpenPositions(const Pos& currentPos, Direction currentDirection);
+    void removePosition(const Pos& pos);  // Helper to remove a position from openPositions
 };
 
 #endif // GRID_H

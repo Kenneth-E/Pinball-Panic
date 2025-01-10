@@ -14,8 +14,10 @@ let package = Package(
         ),
         .target(
             name: "GridBridge",
+            publicHeadersPath: "include",
             cxxSettings: [
-                .headerSearchPath(".")
+                .headerSearchPath("."),
+                .headerSearchPath("include")
             ]
         )
     ],

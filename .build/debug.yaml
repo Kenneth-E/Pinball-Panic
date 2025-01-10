@@ -1,0 +1,114 @@
+client:
+  name: basic
+  file-system: device-agnostic
+tools: {}
+targets:
+  "GridBridge-debug.module": ["<GridBridge-debug.module>"]
+  "PackageStructure": ["<PackageStructure>"]
+  "PinballPanic-debug.exe": ["<PinballPanic-debug.exe>"]
+  "PinballPanic-debug.module": ["<PinballPanic-debug.module>"]
+  "main": ["<GridBridge-debug.module>","<PinballPanic-debug.exe>","<PinballPanic-debug.module>"]
+  "test": ["<GridBridge-debug.module>","<PinballPanic-debug.exe>","<PinballPanic-debug.module>"]
+default: "main"
+nodes:
+  "/Users/kennethelsman/Desktop/Pinball-Panic/Sources/GridBridge/":
+    is-directory-structure: true
+    content-exclusion-patterns: [".git",".build"]
+  "/Users/kennethelsman/Desktop/Pinball-Panic/Sources/PinballPanic/":
+    is-directory-structure: true
+    content-exclusion-patterns: [".git",".build"]
+  "/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/PinballPanic":
+    is-mutated: true
+commands:
+  "/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/GridBridge.build/Grid.cpp.o":
+    tool: clang
+    inputs: ["/Users/kennethelsman/Desktop/Pinball-Panic/Sources/GridBridge/Grid.cpp"]
+    outputs: ["/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/GridBridge.build/Grid.cpp.o"]
+    description: "Compiling GridBridge Grid.cpp"
+    args: ["/Library/Developer/CommandLineTools/usr/bin/clang","-fobjc-arc","-target","arm64-apple-macosx13.0","-O0","-DSWIFT_PACKAGE=1","-DDEBUG=1","-fblocks","-index-store-path","/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/index/store","-I","/Users/kennethelsman/Desktop/Pinball-Panic/Sources/GridBridge/include","-I/Users/kennethelsman/Desktop/Pinball-Panic/Sources/GridBridge","-I/Users/kennethelsman/Desktop/Pinball-Panic/Sources/GridBridge/include","-isysroot","/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk","-fPIC","-g","-g","-MD","-MT","dependencies","-MF","/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/GridBridge.build/Grid.cpp.d","-std=c++17","-c","/Users/kennethelsman/Desktop/Pinball-Panic/Sources/GridBridge/Grid.cpp","-o","/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/GridBridge.build/Grid.cpp.o"]
+    deps: "/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/GridBridge.build/Grid.cpp.d"
+
+  "/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/GridBridge.build/GridBridge.cpp.o":
+    tool: clang
+    inputs: ["/Users/kennethelsman/Desktop/Pinball-Panic/Sources/GridBridge/GridBridge.cpp"]
+    outputs: ["/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/GridBridge.build/GridBridge.cpp.o"]
+    description: "Compiling GridBridge GridBridge.cpp"
+    args: ["/Library/Developer/CommandLineTools/usr/bin/clang","-fobjc-arc","-target","arm64-apple-macosx13.0","-O0","-DSWIFT_PACKAGE=1","-DDEBUG=1","-fblocks","-index-store-path","/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/index/store","-I","/Users/kennethelsman/Desktop/Pinball-Panic/Sources/GridBridge/include","-I/Users/kennethelsman/Desktop/Pinball-Panic/Sources/GridBridge","-I/Users/kennethelsman/Desktop/Pinball-Panic/Sources/GridBridge/include","-isysroot","/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk","-fPIC","-g","-g","-MD","-MT","dependencies","-MF","/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/GridBridge.build/GridBridge.cpp.d","-std=c++17","-c","/Users/kennethelsman/Desktop/Pinball-Panic/Sources/GridBridge/GridBridge.cpp","-o","/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/GridBridge.build/GridBridge.cpp.o"]
+    deps: "/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/GridBridge.build/GridBridge.cpp.d"
+
+  "/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/GridBridge.build/GridCell.cpp.o":
+    tool: clang
+    inputs: ["/Users/kennethelsman/Desktop/Pinball-Panic/Sources/GridBridge/GridCell.cpp"]
+    outputs: ["/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/GridBridge.build/GridCell.cpp.o"]
+    description: "Compiling GridBridge GridCell.cpp"
+    args: ["/Library/Developer/CommandLineTools/usr/bin/clang","-fobjc-arc","-target","arm64-apple-macosx13.0","-O0","-DSWIFT_PACKAGE=1","-DDEBUG=1","-fblocks","-index-store-path","/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/index/store","-I","/Users/kennethelsman/Desktop/Pinball-Panic/Sources/GridBridge/include","-I/Users/kennethelsman/Desktop/Pinball-Panic/Sources/GridBridge","-I/Users/kennethelsman/Desktop/Pinball-Panic/Sources/GridBridge/include","-isysroot","/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk","-fPIC","-g","-g","-MD","-MT","dependencies","-MF","/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/GridBridge.build/GridCell.cpp.d","-std=c++17","-c","/Users/kennethelsman/Desktop/Pinball-Panic/Sources/GridBridge/GridCell.cpp","-o","/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/GridBridge.build/GridCell.cpp.o"]
+    deps: "/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/GridBridge.build/GridCell.cpp.d"
+
+  "/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/PinballPanic-entitlement.plist":
+    tool: write-auxiliary-file
+    inputs: ["<entitlement-plist>","<com.apple.security.get-task-allow>"]
+    outputs: ["/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/PinballPanic-entitlement.plist"]
+    description: "Write auxiliary file /Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/PinballPanic-entitlement.plist"
+
+  "/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/PinballPanic.build/sources":
+    tool: write-auxiliary-file
+    inputs: ["<sources-file-list>","/Users/kennethelsman/Desktop/Pinball-Panic/Sources/PinballPanic/GridBridge.swift","/Users/kennethelsman/Desktop/Pinball-Panic/Sources/PinballPanic/Views/GridView.swift","/Users/kennethelsman/Desktop/Pinball-Panic/Sources/PinballPanic/main.swift"]
+    outputs: ["/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/PinballPanic.build/sources"]
+    description: "Write auxiliary file /Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/PinballPanic.build/sources"
+
+  "/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/PinballPanic.product/Objects.LinkFileList":
+    tool: write-auxiliary-file
+    inputs: ["<link-file-list>","/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/GridBridge.build/Grid.cpp.o","/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/GridBridge.build/GridBridge.cpp.o","/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/GridBridge.build/GridCell.cpp.o","/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/PinballPanic.build/GridBridge.swift.o","/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/PinballPanic.build/GridView.swift.o","/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/PinballPanic.build/main.swift.o"]
+    outputs: ["/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/PinballPanic.product/Objects.LinkFileList"]
+    description: "Write auxiliary file /Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/PinballPanic.product/Objects.LinkFileList"
+
+  "/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/swift-version--1AB21518FC5DEDBE.txt":
+    tool: write-auxiliary-file
+    inputs: ["<swift-get-version>","/Library/Developer/CommandLineTools/usr/bin/swiftc"]
+    outputs: ["/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/swift-version--1AB21518FC5DEDBE.txt"]
+    always-out-of-date: "true"
+    description: "Write auxiliary file /Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/swift-version--1AB21518FC5DEDBE.txt"
+
+  "<GridBridge-debug.module>":
+    tool: phony
+    inputs: ["/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/GridBridge.build/Grid.cpp.o","/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/GridBridge.build/GridBridge.cpp.o","/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/GridBridge.build/GridCell.cpp.o"]
+    outputs: ["<GridBridge-debug.module>"]
+
+  "<PinballPanic-debug.exe>":
+    tool: phony
+    inputs: ["<PinballPanic-debug.exe-CodeSigning>"]
+    outputs: ["<PinballPanic-debug.exe>"]
+
+  "<PinballPanic-debug.module>":
+    tool: phony
+    inputs: ["/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/PinballPanic.build/GridBridge.swift.o","/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/PinballPanic.build/GridView.swift.o","/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/PinballPanic.build/main.swift.o","/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/PinballPanic.swiftmodule"]
+    outputs: ["<PinballPanic-debug.module>"]
+
+  "C.PinballPanic-debug.exe":
+    tool: shell
+    inputs: ["/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/GridBridge.build/Grid.cpp.o","/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/GridBridge.build/GridBridge.cpp.o","/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/GridBridge.build/GridCell.cpp.o","/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/PinballPanic.build/GridBridge.swift.o","/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/PinballPanic.build/GridView.swift.o","/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/PinballPanic.build/main.swift.o","/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/PinballPanic.product/Objects.LinkFileList"]
+    outputs: ["/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/PinballPanic"]
+    description: "Linking ./.build/arm64-apple-macosx/debug/PinballPanic"
+    args: ["/Library/Developer/CommandLineTools/usr/bin/swiftc","-lc++","-L","/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug","-o","/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/PinballPanic","-module-name","PinballPanic","-emit-executable","-Xlinker","-alias","-Xlinker","_PinballPanic_main","-Xlinker","_main","-Xlinker","-rpath","-Xlinker","@loader_path","@/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/PinballPanic.product/Objects.LinkFileList","-target","arm64-apple-macosx13.0","-Xlinker","-add_ast_path","-Xlinker","/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/PinballPanic.swiftmodule","-sdk","/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk","-g"]
+
+  "C.PinballPanic-debug.exe-entitlements":
+    tool: shell
+    inputs: ["/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/PinballPanic","/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/PinballPanic-entitlement.plist"]
+    outputs: ["<PinballPanic-debug.exe-CodeSigning>"]
+    description: "Applying debug entitlements to ./.build/arm64-apple-macosx/debug/PinballPanic"
+    args: ["codesign","--force","--sign","-","--entitlements","/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/PinballPanic-entitlement.plist","/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/PinballPanic"]
+
+  "C.PinballPanic-debug.module":
+    tool: shell
+    inputs: ["/Users/kennethelsman/Desktop/Pinball-Panic/Sources/PinballPanic/GridBridge.swift","/Users/kennethelsman/Desktop/Pinball-Panic/Sources/PinballPanic/Views/GridView.swift","/Users/kennethelsman/Desktop/Pinball-Panic/Sources/PinballPanic/main.swift","/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/swift-version--1AB21518FC5DEDBE.txt","/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/GridBridge.build/Grid.cpp.o","/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/GridBridge.build/GridBridge.cpp.o","/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/GridBridge.build/GridCell.cpp.o","/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/PinballPanic.build/sources"]
+    outputs: ["/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/PinballPanic.build/GridBridge.swift.o","/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/PinballPanic.build/GridView.swift.o","/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/PinballPanic.build/main.swift.o","/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/PinballPanic.swiftmodule"]
+    description: "Compiling Swift Module 'PinballPanic' (3 sources)"
+    args: ["/Library/Developer/CommandLineTools/usr/bin/swiftc","-module-name","PinballPanic","-emit-dependencies","-emit-module","-emit-module-path","/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/PinballPanic.swiftmodule","-output-file-map","/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/PinballPanic.build/output-file-map.json","-incremental","-c","@/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/PinballPanic.build/sources","-I","/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug","-target","arm64-apple-macosx13.0","-swift-version","5","-enable-batch-mode","-index-store-path","/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/index/store","-Onone","-enable-testing","-j8","-DSWIFT_PACKAGE","-DDEBUG","-Xcc","-fmodule-map-file=/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/GridBridge.build/module.modulemap","-Xcc","-I","-Xcc","/Users/kennethelsman/Desktop/Pinball-Panic/Sources/GridBridge/include","-module-cache-path","/Users/kennethelsman/Desktop/Pinball-Panic/.build/arm64-apple-macosx/debug/ModuleCache","-parseable-output","-Xfrontend","-entry-point-function-name","-Xfrontend","PinballPanic_main","-color-diagnostics","-sdk","/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk","-g","-Xcc","-isysroot","-Xcc","/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk","-Xcc","-fPIC","-Xcc","-g","-package-name","pinball_panic"]
+
+  "PackageStructure":
+    tool: package-structure-tool
+    inputs: ["/Users/kennethelsman/Desktop/Pinball-Panic/Sources/GridBridge/","/Users/kennethelsman/Desktop/Pinball-Panic/Sources/PinballPanic/","/Users/kennethelsman/Desktop/Pinball-Panic/Package.swift","/Users/kennethelsman/Desktop/Pinball-Panic/Package.resolved"]
+    outputs: ["<PackageStructure>"]
+    description: "Planning build"
+    allow-missing-inputs: true
+

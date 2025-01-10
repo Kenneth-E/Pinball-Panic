@@ -35,52 +35,77 @@ Direction Grid::getStartingDirection(const Pos& entryPos) const{
     return Direction::Left;                            // Right edge
 }
 
+// Check if a position is within the center region of the grid
+bool Grid::isWithinCenter(const Pos& pos) const {
+    return (pos.first > 0 && pos.first < gridSize - 1) && (pos.second > 0 && pos.second < gridSize - 1);
+}
+
 // Check if a position is within the grid bounds
 bool Grid::isWithinBounds(const Pos& pos) const {
-    return (pos.first >= 0 && pos.first < gridSize) && (pos.second >= 0 && pos.second < gridSize);
+    return (pos.first >= 0 && pos.first <= gridSize - 1) && (pos.second >= 0 && pos.second <= gridSize - 1);
 }
 
 // Find open positions along the ball's path
-std::vector<Pos> Grid::findOpenPositions(const Pos& currentPos, Direction currentDirection, const std::set<Pos>& occupied) const{
-    std::vector<Pos> openPositions;
+std::vector<Pos> Grid::findOpenPositions(const Pos& currentPos, Direction currentDirection) {
+    std::vector<Pos> openPositionsInDirection;
+    std::cout << "Finding open positions from (" << currentPos.first << "," << currentPos.second 
+              << ") going direction " << static_cast<int>(currentDirection) << std::endl;
+    
     Pos nextPos = getNextPosition(currentPos, currentDirection);
-
-    while (isWithinBounds(nextPos)) {
-        if (occupied.find(nextPos) == occupied.end() &&
-            gridCells[nextPos.first][nextPos.second].type == GridCellType::Empty) {
-            openPositions.push_back(nextPos);
-        }
-        nextPos = getNextPosition(nextPos, currentDirection);
+    
+    // Stop if first position is invalid
+    if (nextPos == currentPos) {
+        return openPositionsInDirection;
     }
 
-    return openPositions;
+    while (isWithinBounds(nextPos)) {
+        std::cout << "Checking position (" << nextPos.first << "," << nextPos.second << ")" << std::endl;
+        
+        if (openPositions.find(nextPos) != openPositions.end()) {
+            std::cout << "Position is not occupied" << std::endl;
+            if (gridCells[nextPos.first][nextPos.second].type == GridCellType::Empty) {
+                std::cout << "Position is empty, adding to open positions" << std::endl;
+                openPositionsInDirection.push_back(nextPos);
+            }
+        } else {
+            std::cout << "Position is occupied" << std::endl;
+        }
+        
+        Pos prevPos = nextPos;
+        nextPos = getNextPosition(nextPos, currentDirection);
+        
+        // Break if we're not moving anymore
+        if (prevPos == nextPos) break;
+    }
+    
+    std::cout << "Found " << openPositionsInDirection.size() << " open positions" << std::endl;
+    return openPositionsInDirection;
 }
 
 // Calculate the next position based on the current direction
-Pos Grid::getNextPosition(const Pos& currentPos, Direction direction) const{
+Pos Grid::getNextPosition(const Pos& currentPos, Direction direction) const {
     Pos nextPos = currentPos;
     switch (direction) {
-        case Direction::Up:    nextPos = {currentPos.first - 1, currentPos.second}; break;
-        case Direction::Down:  nextPos = {currentPos.first + 1, currentPos.second}; break;
-        case Direction::Left:  nextPos = {currentPos.first, currentPos.second - 1}; break;
-        case Direction::Right: nextPos = {currentPos.first, currentPos.second + 1}; break;
+        case Direction::Up:    nextPos = {currentPos.first - 1, currentPos.second}; break;    // Move up (decrease row)
+        case Direction::Down:  nextPos = {currentPos.first + 1, currentPos.second}; break;    // Move down (increase row)
+        case Direction::Left:  nextPos = {currentPos.first, currentPos.second - 1}; break;    // Move left (decrease column)
+        case Direction::Right: nextPos = {currentPos.first, currentPos.second + 1}; break;    // Move right (increase column)
         default:              return currentPos;
     }
     
-    // Add bounds check
     if (!isWithinBounds(nextPos)) {
         return currentPos;
     }
     return nextPos;
 }
 
-// Get a random entry position on the edge of the grid
+// Get a random entry position on the edge of the grid, excluding the corners
 Pos Grid::getEntryPosition() const {
     int side = std::rand() % 4;
-    int pos = std::rand() % gridSize;
+    int pos = std::rand() % (gridSize - 2) + 1;
 
     switch (side) {
-        case 0: return {0, pos};               // Top edge
+        case 0: return {0 , pos};               // Top edge
         case 1: return {gridSize - 1, pos};    // Bottom edge
         case 2: return {pos, 0};              // Left edge
         default: return {pos, gridSize - 1};  // Right edge
@@ -208,32 +233,98 @@ Direction Grid::getNewDirection(GridCellType type, Direction currentDirection, O
     return currentDirection;
 }
 
-// Generate the grid dynamically
-void Grid::generateGrid(std::vector<GridCellType>& objectTypes, int attempt) {
-    std::cout << "Grid::generateGrid - Starting (simplified)..." << std::endl;
-    std::cout.flush();
-
-    // Just create an empty grid with one entry point
-    initializeGrid();
+void Grid::initializeOpenPositions() {
+    openPositions.clear();
+    occupiedPositions.clear();
     
-    // Place entry at (0,0)
-    gridCells[0][0].type = GridCellType::Entry;
-    
-    // Place exit at (4,4)
-    gridCells[4][4].type = GridCellType::Exit;
-    
-    std::cout << "Grid::generateGrid - Completed simplified version" << std::endl;
-    std::cout.flush();
+    // Add all valid positions to openPositions
+    for (int i = 0; i < gridSize; i++) {
+        for (int j = 0; j < gridSize; j++) {
+            openPositions.insert({i, j});
+        }
+    }
 }
 
-// Check if a position is out of the center region of the grid
-bool Grid::isOutOfCenter(const Pos& pos) const {
-    // Define the center region as the middle 60% of the grid
-    int borderSize = gridSize * 0.2; // 20% border on each side
+void Grid::removePosition(const Pos& pos) {
+    std::cout << "Removing position (" << pos.first << "," << pos.second << ")" << std::endl;
+    openPositions.erase(pos);
+    occupiedPositions.insert(pos);
+}
+
+void Grid::generateGrid(std::vector<GridCellType>& objectTypes, int attempt) {
+    std::cout << "\n=== Starting Grid Generation ===" << std::endl;
     
-    // Check if position is in the border area
-    return pos.first < borderSize || 
-           pos.first >= gridSize - borderSize ||
-           pos.second < borderSize || 
-           pos.second >= gridSize - borderSize;
+    initializeGrid();
+    initializeOpenPositions();
+    std::cout << "Grid and open positions initialized" << std::endl;
+    
+    // Get entry position and mark it as occupied
+    Pos entryPos = getEntryPosition();
+    removePosition(entryPos);
+    gridCells[entryPos.first][entryPos.second].type = GridCellType::Entry;
+    std::cout << "Entry position set to: (" << entryPos.first << "," << entryPos.second << ")" << std::endl;
+    
+    Direction currentDirection = getStartingDirection(entryPos);
+    Pos currentPos = entryPos;
+    int objectsPlaced = 0;
+    
+    while (objectsPlaced < minObjects) {
+        std::cout << "\n--- Placing Object " << objectsPlaced + 1 << " ---" << std::endl;
+        
+        // If there are no open positions, restart
+        if (openPositions.empty()) {
+            std::cout << "No open positions found - restarting grid generation" << std::endl;
+            generateGrid(objectTypes);
+            return;
+        }
+        
+        // Select random position from available positions
+        // in the direction of the current direction
+        std::vector<Pos> openPositionsInDirection = findOpenPositions(currentPos, currentDirection);
+        if (openPositionsInDirection.empty()) {
+            std::cout << "No open positions found in the current direction - restarting grid generation" << std::endl;
+            generateGrid(objectTypes, attempt + 1);
+            return;
+        }
+        int randomIndex = std::rand() % openPositionsInDirection.size();
+        Pos selectedPos = openPositionsInDirection[randomIndex];
+        removePosition(selectedPos);
+        
+        // Place object at selected position
+        GridCellType randomType = objectTypes[std::rand() % objectTypes.size()];
+        Orientation randomOrientation = getViableOrientation(randomType);
+        gridCells[selectedPos.first][selectedPos.second].type = randomType;
+        gridCells[selectedPos.first][selectedPos.second].orientation = randomOrientation;
+        
+        // Update tracking variables
+        currentDirection = getNewDirection(randomType, currentDirection, randomOrientation, selectedPos);
+        currentPos = selectedPos;
+        objectsPlaced++;
+        
+        // Handle teleporter pairs
+        if (randomType == GridCellType::Teleporter) {
+            if (!openPositions.empty()) {
+                auto teleporterIt = openPositions.begin();
+                Pos teleporterPos = *teleporterIt;
+                removePosition(teleporterPos);
+                
+                gridCells[teleporterPos.first][teleporterPos.second].type = GridCellType::Teleporter;
+                currentPos = teleporterPos;
+                objectsPlaced++;
+            }
+            else {
+                std::cout << "No open positions found for teleporter pair - restarting grid generation" << std::endl;
+                generateGrid(objectTypes, attempt + 1);
+                return;
+            }
+        }
+    }
+    
+    // Place exit
+    while (isWithinCenter(currentPos)) {
+        currentPos = getNextPosition(currentPos, currentDirection);
+    }
+    gridCells[currentPos.first][currentPos.second].type = GridCellType::Exit;
+    
+    std::cout << "\n=== Grid Generation Complete ===" << std::endl;
 }
