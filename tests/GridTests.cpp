@@ -66,3 +66,26 @@ TEST_CASE("Orientation assignment is valid", "[grid]") {
         REQUIRE(orientation == Orientation::None);
     }
 }; 
+
+TEST_CASE("DirectionalBumper direction changes", "[grid]") {
+    std::vector<GridCellType> objectTypes = {GridCellType::DirectionalBumper};
+    Grid grid(5, 2, 3, objectTypes);
+    
+    SECTION("TopRight bumper deflections") {
+        Direction newDir = grid.getNewDirection(
+            GridCellType::DirectionalBumper,
+            Direction::Up,
+            Orientation::TopRight,
+            {2, 2}
+        );
+        REQUIRE(newDir == Direction::Left);
+        
+        newDir = grid.getNewDirection(
+            GridCellType::DirectionalBumper,
+            Direction::Right,
+            Orientation::TopRight,
+            {2, 2}
+        );
+        REQUIRE(newDir == Direction::Down);
+    }
+} 

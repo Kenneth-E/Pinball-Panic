@@ -37,5 +37,7 @@ swift run
 - Add more tests
 - Add more documentation
 - Add more error handling
-- Add more comments
-- Add more logging
+
+# BUGS
+
+- Invalid grid generation

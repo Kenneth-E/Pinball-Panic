@@ -36,18 +36,19 @@ public:
 
     Orientation getViableOrientation(GridCellType type) const;
 
+    Direction getNewDirection(GridCellType type, Direction currentDirection, 
+                        Orientation orientation, const Pos& pos) const;
+
 private:
     static const int MAX_GENERATION_ATTEMPTS = 50;
     // Helper functions
     void initializeGrid();
     Direction getStartingDirection(const Pos& entryPos) const;
     bool isWithinBounds(const Pos& pos) const;
-    Direction getNewDirection(GridCellType type, Direction currentDirection, 
-                            Orientation orientation, const Pos& pos) const;
     std::vector<Pos> findOpenPositions(const Pos& currentPos, Direction currentDirection);
     Pos getNextPosition(const Pos& currentPos, Direction direction) const;
     bool isWithinCenter(const Pos& pos) const;
-    void initializeOpenPositions();  // New helper function
+    void initializeOpenPositions();
     void updateOpenPositions(const Pos& currentPos, Direction currentDirection);
     void removePosition(const Pos& pos);  // Helper to remove a position from openPositions
 };

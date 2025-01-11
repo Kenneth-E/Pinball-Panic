@@ -172,6 +172,7 @@ std::string Grid::toASCII() const {
                     } else if (cellOrientation == Orientation::BottomLeft) {
                         oss << "◺ ";
                     }
+                    break;
 
                 default:                               
                     oss << "? "; break;
@@ -263,7 +264,8 @@ void Grid::generateGrid(std::vector<GridCellType>& objectTypes, int attempt) {
     
     // Get entry position and mark it as occupied
     Pos entryPos = getEntryPosition();
-    removePosition(entryPos);
+
+    // NOTE: entry position does not get removed since it is not in the center of the grid
     gridCells[entryPos.first][entryPos.second].type = GridCellType::Entry;
     std::cout << "Entry position set to: (" << entryPos.first << "," << entryPos.second << ")" << std::endl;
     
