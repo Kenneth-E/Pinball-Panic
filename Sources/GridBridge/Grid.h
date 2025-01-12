@@ -5,10 +5,18 @@
 #include <set>
 #include <string>
 #include <utility>
+#include <random>
 #include "GridCell.h"
+#include <unordered_map>
 
 // Type alias for position in the grid (row, column)
 using Pos = std::pair<int, int>;
+
+struct PosHash {
+    std::size_t operator()(const Pos& pos) const {
+        return std::hash<int>()(pos.first) ^ (std::hash<int>()(pos.second) << 1);
+    }
+};
 
 class Grid {
 public:
@@ -32,17 +40,22 @@ public:
 
     std::string toASCII() const;
 
-    Pos getEntryPosition() const;
+    Pos getEntryPosition();
 
-    Orientation getViableOrientation(GridCellType type) const;
+    Orientation getViableOrientation(GridCellType type);
 
     Direction getNewDirection(GridCellType type, Direction currentDirection, 
                         Orientation orientation, const Pos& pos) const;
 
 private:
+    mutable std::mt19937 rng;
+    int getRandomInt(int min, int max) const;
+    
     static const int MAX_GENERATION_ATTEMPTS = 50;
     // Helper functions
     void initializeGrid();
+    void reset();
+    std::string DirectionToString(Direction dir) const;
     Direction getStartingDirection(const Pos& entryPos) const;
     bool isWithinBounds(const Pos& pos) const;
     std::vector<Pos> findOpenPositions(const Pos& currentPos, Direction currentDirection);

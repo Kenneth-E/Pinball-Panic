@@ -24,7 +24,7 @@ struct GridView: View {
             case .teleporter: self = .teleporter
             case .directionalBumper: self = .directionalBumper(orientation)
             case .activatedBumper: self = .activatedBumper(orientation)
-            default: self = .empty
+            case .inBallPath: self = .empty
             }
         }
         
@@ -68,31 +68,28 @@ struct GridView: View {
                 .font(.title)
             
             gridView
+                .frame(width: 300, height: 300)
                 .border(Color.black, width: 2)
             
             Button("Generate New Grid") {
-                generateGrid()
+                regenerateGrid()
             }
             .padding()
         }
         .padding(20)
-        .frame(minWidth: 400, minHeight: 400)
         .onAppear {
-            generateGrid()
+            regenerateGrid()
         }
     }
     
     private var gridView: some View {
-        VStack(spacing: 1) {
-            ForEach(0..<5, id: \.self) { row in
-                HStack(spacing: 1) {
-                    ForEach(0..<5, id: \.self) { col in
-                        CellView(type: grid[row][col])
-                    }
-                }
+        LazyVGrid(columns: Array(repeating: GridItem(.fixed(50)), count: 5), spacing: 1) {
+            ForEach(0..<25) { index in
+                let row = index / 5
+                let col = index % 5
+                CellView(type: grid[row][col])
             }
         }
-        .padding()
     }
     
     struct CellView: View {
@@ -107,11 +104,14 @@ struct GridView: View {
         }
     }
     
-    private func generateGrid() {
-        print("Generating grid...")  // Debug print
+    private func regenerateGrid() {
+        // Reset the grid state
+        grid = Array(repeating: Array(repeating: .empty, count: 5), count: 5)
+        
+        // Generate new grid
         gridBridge.generateGrid()
         
-        print("Updating grid data...")  // Debug print
+        // Update grid data
         for row in 0..<5 {
             for col in 0..<5 {
                 let type = gridBridge.getCellType(row: Int32(row), col: Int32(col))
@@ -119,6 +119,5 @@ struct GridView: View {
                 grid[row][col] = CellType(from: type, orientation: orientation)
             }
         }
-        print("Grid generation complete")  // Debug print
     }
 } 

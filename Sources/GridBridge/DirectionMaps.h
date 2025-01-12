@@ -13,8 +13,8 @@ namespace DirectionMaps {
                 {Orientation::DownRight, {{Direction::Down, Direction::Right}, {Direction::Right, Direction::Down}, {Direction::Left, Direction::Up}, {Direction::Up, Direction::Left}}}
             }},
             {GridCellType::ActivatedBumper, {
-                {Orientation::UpRight, {{Direction::Up, Direction::Right}, {Direction::Right, Direction::Down}, {Direction::Left, Direction::Down}, {Direction::Down, Direction::Left}}},
-                {Orientation::DownRight, {{Direction::Down, Direction::Right}, {Direction::Right, Direction::Up}, {Direction::Left, Direction::Up}, {Direction::Up, Direction::Left}}}
+                {Orientation::UpRight, {{Direction::Up, Direction::Right}, {Direction::Right, Direction::Up}, {Direction::Left, Direction::Down}, {Direction::Down, Direction::Left}}},
+                {Orientation::DownRight, {{Direction::Down, Direction::Right}, {Direction::Right, Direction::Down}, {Direction::Left, Direction::Up}, {Direction::Up, Direction::Left}}}
             }},
             {GridCellType::DirectionalBumper, {
                 {Orientation::TopLeft, {{Direction::Up, Direction::Right}, {Direction::Down, Direction::Down}, {Direction::Left, Direction::Down}, {Direction::Right, Direction::Right}}},

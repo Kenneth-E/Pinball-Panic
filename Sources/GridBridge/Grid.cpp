@@ -5,6 +5,7 @@
 #include <ctime>
 #include <sstream>
 #include <unordered_map>
+#include <random>
 #include "Grid.h"
 #include "DirectionMaps.h"
 
@@ -12,7 +13,8 @@
 Grid::Grid(int size, int minObjects, int maxObjects, const std::vector<GridCellType>& objectTypes)
     : gridSize(size)
     , minObjects(minObjects)
-    , maxObjects(maxObjects) {
+    , maxObjects(maxObjects)
+    , rng(std::random_device{}()) {
     std::cout << "Grid constructor - Start" << std::endl;
     std::cout.flush();
     
@@ -25,6 +27,22 @@ Grid::Grid(int size, int minObjects, int maxObjects, const std::vector<GridCellT
         std::cout << "Grid constructor - Unknown exception" << std::endl;
     }
     std::cout.flush();
+}
+
+// Helper to get random number in range
+int Grid::getRandomInt(int min, int max) const{
+    std::uniform_int_distribution<int> dist(min, max);
+    return dist(rng);
+}
+
+std::string Grid::DirectionToString(Direction dir) const {
+    switch (dir) {
+        case Direction::Up:    return "Up";
+        case Direction::Down:  return "Down";
+        case Direction::Left:  return "Left";
+        case Direction::Right: return "Right";
+        default:              return "Unknown";
+    }
 }
 
 // Get the starting direction based on entry position
@@ -49,7 +67,7 @@ bool Grid::isWithinBounds(const Pos& pos) const {
 std::vector<Pos> Grid::findOpenPositions(const Pos& currentPos, Direction currentDirection) {
     std::vector<Pos> openPositionsInDirection;
     std::cout << "Finding open positions from (" << currentPos.first << "," << currentPos.second 
-              << ") going direction " << static_cast<int>(currentDirection) << std::endl;
+              << ") going direction " << DirectionToString(currentDirection) << std::endl;
     
     Pos nextPos = getNextPosition(currentPos, currentDirection);
     
@@ -100,9 +118,9 @@ Pos Grid::getNextPosition(const Pos& currentPos, Direction direction) const {
 }
 
 // Get a random entry position on the edge of the grid, excluding the corners
-Pos Grid::getEntryPosition() const {
-    int side = std::rand() % 4;
-    int pos = (std::rand() % (gridSize - 2)) + 1;
+Pos Grid::getEntryPosition() {
+    int side = getRandomInt(0, 3);
+    int pos = getRandomInt(1, gridSize - 2);
 
     switch (side) {
         case 0: return {0, pos};               // Top edge
@@ -202,7 +220,7 @@ void Grid::initializeGrid() {
 }
 
 // Select random orientation dependent on the grid cell type
-Orientation Grid::getViableOrientation(GridCellType type) const {
+Orientation Grid::getViableOrientation(GridCellType type) {
     std::vector<Orientation> viableOrientations;
     switch (type) {
         case GridCellType::Tunnel: 
@@ -220,7 +238,7 @@ Orientation Grid::getViableOrientation(GridCellType type) const {
         default:
             viableOrientations = {Orientation::None};
     }
-    return viableOrientations[std::rand() % viableOrientations.size()];
+    return viableOrientations[getRandomInt(0, viableOrientations.size() - 1)];
 }
 
 Direction Grid::getNewDirection(GridCellType type, Direction currentDirection, Orientation orientation, const Pos& currentPos) const {
@@ -255,81 +273,178 @@ void Grid::removePosition(const Pos& pos) {
     occupiedPositions.insert(pos);
 }
 
+void Grid::reset() {
+    // Clear all grid cells
+    initializeGrid();
+    
+    // Reset positions
+    entryPos = {0, 0};
+    
+    // Clear open/occupied positions
+    openPositions.clear();
+    occupiedPositions.clear();
+    
+    // Reset all cells to empty
+    for (int i = 0; i < gridSize; i++) {
+        for (int j = 0; j < gridSize; j++) {
+            gridCells[i][j].type = GridCellType::Empty;
+            gridCells[i][j].direction = Direction::None;
+            gridCells[i][j].orientation = Orientation::None;
+        }
+    }
+}
+
+// Replace the single TeleporterPair with a vector
+struct TeleporterPair {
+    Pos first;
+    Pos second;
+};
+
 void Grid::generateGrid(std::vector<GridCellType>& objectTypes, int attempt) {
+    reset();
     std::cout << "\n=== Starting Grid Generation ===" << std::endl;
     
+    // Initial setup
     initializeGrid();
     initializeOpenPositions();
-    std::cout << "Grid and open positions initialized" << std::endl;
     
-    // Get entry position and mark it as occupied
+    // Place entry
     Pos entryPos = getEntryPosition();
-
-    // NOTE: entry position does not get removed since it is not in the center of the grid
     gridCells[entryPos.first][entryPos.second].type = GridCellType::Entry;
-    std::cout << "Entry position set to: (" << entryPos.first << "," << entryPos.second << ")" << std::endl;
     
+    // Initialize ball path
     Direction currentDirection = getStartingDirection(entryPos);
     Pos currentPos = entryPos;
     int objectsPlaced = 0;
+
+    // Use vector for multiple teleporter pairs
+    std::vector<TeleporterPair> teleporterPairs;
     
-    while (objectsPlaced < minObjects) {
-        std::cout << "\n--- Placing Object " << objectsPlaced + 1 << " ---" << std::endl;
+    // Place initial object in the ball's path
+    Pos nextPos = getNextPosition(currentPos, currentDirection);
+    std::vector<Pos> initialOpenPositions = findOpenPositions(currentPos, currentDirection);
+    if (!initialOpenPositions.empty()) {
+        int randomIndex = getRandomInt(0, initialOpenPositions.size() - 1);
+        Pos selectedPos = initialOpenPositions[randomIndex];
         
-        // If there are no open positions, restart
-        if (openPositions.empty()) {
-            std::cout << "No open positions found - restarting grid generation" << std::endl;
-            generateGrid(objectTypes, attempt + 1);
-            return;
-        }
-        
-        // Select random position from available positions
-        // in the direction of the current direction
-        std::vector<Pos> openPositionsInDirection = findOpenPositions(currentPos, currentDirection);
-        if (openPositionsInDirection.empty()) {
-            std::cout << "No open positions found in the current direction - restarting grid generation" << std::endl;
-            generateGrid(objectTypes, attempt + 1);
-            return;
-        }
-        int randomIndex = std::rand() % openPositionsInDirection.size();
-        Pos selectedPos = openPositionsInDirection[randomIndex];
-        removePosition(selectedPos);
-        
-        // Place object at selected position
-        GridCellType randomType = objectTypes[std::rand() % objectTypes.size()];
+        GridCellType randomType = objectTypes[getRandomInt(0, objectTypes.size() - 1)];
         Orientation randomOrientation = getViableOrientation(randomType);
-        gridCells[selectedPos.first][selectedPos.second].type = randomType;
-        gridCells[selectedPos.first][selectedPos.second].orientation = randomOrientation;
         
-        // Update tracking variables
-        currentDirection = getNewDirection(randomType, currentDirection, randomOrientation, selectedPos);
-        currentPos = selectedPos;
-        objectsPlaced++;
-        
-        // Handle teleporter pairs
         if (randomType == GridCellType::Teleporter) {
-            if (!openPositions.empty()) {
-                auto teleporterIt = openPositions.begin();
-                Pos teleporterPos = *teleporterIt;
-                removePosition(teleporterPos);
+            // Place first teleporter
+            gridCells[selectedPos.first][selectedPos.second].type = GridCellType::Teleporter;
+            removePosition(selectedPos);
+            
+            // Find position for partner teleporter
+            std::vector<Pos> remainingPositions(openPositions.begin(), openPositions.end());
+            if (!remainingPositions.empty()) {
+                int partnerIndex = getRandomInt(0, remainingPositions.size() - 1);
+                Pos partnerPos = remainingPositions[partnerIndex];
                 
-                gridCells[teleporterPos.first][teleporterPos.second].type = GridCellType::Teleporter;
-                currentPos = teleporterPos;
-                objectsPlaced++;
-            }
-            else {
-                std::cout << "No open positions found for teleporter pair - restarting grid generation" << std::endl;
+                // Place partner teleporter
+                gridCells[partnerPos.first][partnerPos.second].type = GridCellType::Teleporter;
+                removePosition(partnerPos);
+                
+                // Add new teleporter pair to vector
+                teleporterPairs.push_back({selectedPos, partnerPos});
+                objectsPlaced += 2;
+            } else {
+                std::cout << "No remaining positions for initial teleporter pair, regenerating" << std::endl;
                 generateGrid(objectTypes, attempt + 1);
                 return;
             }
+        } else {
+            // Place non-teleporter object
+            gridCells[selectedPos.first][selectedPos.second].type = randomType;
+            gridCells[selectedPos.first][selectedPos.second].orientation = randomOrientation;
+            removePosition(selectedPos);
+            objectsPlaced++;
         }
     }
     
-    // Place exit
-    while (isWithinCenter(currentPos)) {
-        currentPos = getNextPosition(currentPos, currentDirection);
-    }
-    gridCells[currentPos.first][currentPos.second].type = GridCellType::Exit;
     
-    std::cout << "\n=== Grid Generation Complete ===" << std::endl;
+    while (true) {
+        Pos nextPos = getNextPosition(currentPos, currentDirection);
+        
+        if (!isWithinCenter(nextPos)) {
+            gridCells[nextPos.first][nextPos.second].type = GridCellType::Exit;
+            break;
+        }
+        
+        // Mark ball path
+        if (gridCells[nextPos.first][nextPos.second].type == GridCellType::Empty) {
+            gridCells[nextPos.first][nextPos.second].type = GridCellType::InBallPath;
+            removePosition(nextPos);
+        }
+        
+        if (gridCells[nextPos.first][nextPos.second].type != GridCellType::Empty && 
+            gridCells[nextPos.first][nextPos.second].type != GridCellType::InBallPath) {
+            
+            GridCellType cellType = gridCells[nextPos.first][nextPos.second].type;
+            Orientation cellOrientation = gridCells[nextPos.first][nextPos.second].orientation;
+            
+            // Handle teleporter interaction
+            if (cellType == GridCellType::Teleporter) {
+                // Find matching teleporter pair
+                for (const auto& pair : teleporterPairs) {
+                    if (nextPos == pair.first) {
+                        nextPos = pair.second;
+                        break;
+                    } else if (nextPos == pair.second) {
+                        nextPos = pair.first;
+                        break;
+                    }
+                }
+            }
+            
+            currentDirection = getNewDirection(cellType, currentDirection, cellOrientation, nextPos);
+            
+            if (objectsPlaced < minObjects) {
+                std::vector<Pos> openPositionsInDirection = findOpenPositions(nextPos, currentDirection);
+                if (!openPositionsInDirection.empty()) {
+                    int randomIndex = getRandomInt(0, openPositionsInDirection.size() - 1);
+                    Pos selectedPos = openPositionsInDirection[randomIndex];
+                    
+                    GridCellType randomType = objectTypes[getRandomInt(0, objectTypes.size() - 1)];
+                    Orientation randomOrientation = getViableOrientation(randomType);
+                    
+                    if (randomType == GridCellType::Teleporter) {
+                        gridCells[selectedPos.first][selectedPos.second].type = GridCellType::Teleporter;
+                        removePosition(selectedPos);
+                        
+                        std::vector<Pos> remainingPositions(openPositions.begin(), openPositions.end());
+                        if (!remainingPositions.empty()) {
+                            int partnerIndex = getRandomInt(0, remainingPositions.size() - 1);
+                            Pos partnerPos = remainingPositions[partnerIndex];
+                            
+                            gridCells[partnerPos.first][partnerPos.second].type = GridCellType::Teleporter;
+                            removePosition(partnerPos);
+                            
+                            // Add new teleporter pair to vector
+                            teleporterPairs.push_back({selectedPos, partnerPos});
+                            objectsPlaced += 2;
+                        }
+                        else {
+                            std::cout << "No remaining positions for teleporter pair" << std::endl;
+                            // regenerate grid
+                            generateGrid(objectTypes, attempt + 1);
+                        }
+                    } else {
+                        gridCells[selectedPos.first][selectedPos.second].type = randomType;
+                        gridCells[selectedPos.first][selectedPos.second].orientation = randomOrientation;
+                        removePosition(selectedPos);
+                        objectsPlaced++;
+                    }
+                }
+            }
+        }
+        
+        currentPos = nextPos;
+    }
+    // check if grid is valid
+    if (objectsPlaced < minObjects) {
+        std::cout << "Grid is invalid, regenerating" << std::endl;
+        generateGrid(objectTypes, attempt + 1);
+    }
+    std::cout << "Grid generation complete" << std::endl;
 }
