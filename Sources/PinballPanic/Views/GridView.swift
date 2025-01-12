@@ -1,13 +1,13 @@
 import SwiftUI
 
 struct GridView: View {
-    private let gridSize: Int = 5  // Can be changed
+    private let gridSize: Int = 10  // Can be changed
     @State private var grid: [[CellType]]
     private let gridBridge: GridBridge
     
-    init(size: Int = 5, 
-         minObjects: Int = 2, 
-         maxObjects: Int = 3,
+    init(size: Int = 10, 
+         minObjects: Int = 10, 
+         maxObjects: Int = 13,
          objectTypes: [GridCellType] = [.bumper, .tunnel, .teleporter, .directionalBumper]) {
         
         self.grid = Array(repeating: Array(repeating: .empty, count: size), count: size)
@@ -106,10 +106,10 @@ struct GridView: View {
         
         var body: some View {
             Text(type.symbol)
-                .frame(width: 50, height: 50)
+                .frame(width: 25, height: 25)
                 .background(type.color.opacity(0.3))
                 .border(Color.black, width: 1)
-                .font(.system(size: 24))
+                .font(.system(size: 18))
         }
     }
     

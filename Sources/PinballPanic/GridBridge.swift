@@ -29,9 +29,9 @@ enum GridOrientation: Int {
 class GridBridge {
     private var grid: OpaquePointer
     
-    init(size: Int32 = 5, 
-         minObjects: Int32 = 2, 
-         maxObjects: Int32 = 3,
+    init(size: Int32 = 10, 
+         minObjects: Int32 = 4, 
+         maxObjects: Int32 = 6,
          objectTypes: [GridCellType] = [.bumper, .tunnel, .teleporter, .directionalBumper]) {
         
         // Convert Swift array to vector

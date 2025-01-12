@@ -27,15 +27,15 @@ enum class Orientation {
 
 // Enum for GridCellType
 enum class GridCellType {
-    Entry,
-    Exit,
-    Empty,
-    InBallPath,
-    Bumper,
-    Tunnel,
-    Teleporter,
-    ActivatedBumper,
-    DirectionalBumper
+    Empty = 0,
+    Entry = 1,
+    Exit = 2,
+    InBallPath = 3,
+    Bumper = 4,
+    Tunnel = 5,
+    Teleporter = 6,
+    ActivatedBumper = 7,
+    DirectionalBumper = 8
 };
 
 // Simple struct representing a cell in the grid
