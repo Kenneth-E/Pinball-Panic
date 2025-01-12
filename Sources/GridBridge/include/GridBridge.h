@@ -28,6 +28,14 @@ int get_cell_orientation(GridHandle grid, int row, int col);
 // Test function
 bool test_bridge(void);
 
+extern "C" {
+    void* Grid_Create(int size, int minObjects, int maxObjects, const int* objectTypes, int objectTypesCount);
+    void Grid_GenerateGrid(void* grid);
+    int Grid_GetCellType(void* grid, int row, int col);
+    int Grid_GetCellOrientation(void* grid, int row, int col);
+    void Grid_Destroy(void* grid);
+}
+
 #ifdef __cplusplus
 }
 #endif

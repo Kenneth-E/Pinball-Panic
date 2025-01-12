@@ -27,50 +27,36 @@ enum GridOrientation: Int {
 }
 
 class GridBridge {
-    private var handle: OpaquePointer?
+    private var grid: OpaquePointer
     
-    init(size: Int32, minObjects: Int32, maxObjects: Int32) {
-        print("Swift: Testing bridge...")
-        let testResult = test_bridge()
-        print("Swift: Bridge test result: \(testResult)")
+    init(size: Int32 = 5, 
+         minObjects: Int32 = 2, 
+         maxObjects: Int32 = 3,
+         objectTypes: [GridCellType] = [.bumper, .tunnel, .teleporter, .directionalBumper]) {
         
-        print("Swift: Creating GridBridge...")
-        handle = create_grid(size, minObjects, maxObjects)
-        print("Swift: GridBridge created, handle: \(handle != nil)")
+        // Convert Swift array to vector
+        let objectTypesVector = objectTypes.map { Int32($0.rawValue) }
+        grid = Grid_Create(size, minObjects, maxObjects, objectTypesVector, Int32(objectTypesVector.count))
     }
     
     deinit {
         print("Swift: Destroying GridBridge...")
-        if let handle = handle {
-            destroy_grid(handle)
-        }
+        Grid_Destroy(grid)
     }
     
     func generateGrid() {
         print("Swift: Calling generateGrid...")
-        guard let handle = handle else {
-            print("Swift: Error - handle is nil!")
-            return
-        }
-        generate_grid(handle)
+        Grid_GenerateGrid(grid)
         print("Swift: generateGrid call complete")
     }
     
     func getCellType(row: Int32, col: Int32) -> GridCellType {
-        guard let handle = handle else {
-            print("Swift: Error - handle is nil in getCellType!")
-            return .empty
-        }
-        let rawValue = get_cell_type(handle, row, col)
+        let rawValue = Grid_GetCellType(grid, row, col)
         return GridCellType(rawValue: Int(rawValue)) ?? .empty
     }
     
     func getCellOrientation(row: Int32, col: Int32) -> GridOrientation {
-        guard let handle = handle else {
-            print("Swift: Error - handle is nil in getCellOrientation!")
-            return .none
-        }
-        let rawValue = get_cell_orientation(handle, row, col)
+        let rawValue = Grid_GetCellOrientation(grid, row, col)
         return GridOrientation(rawValue: Int(rawValue)) ?? .none
     }
 }
@@ -94,3 +80,19 @@ private func get_cell_orientation(_ handle: OpaquePointer, _ row: Int32, _ col: 
 
 @_silgen_name("test_bridge")
 private func test_bridge() -> Bool 
+
+@_silgen_name("Grid_Destroy")
+private func Grid_Destroy(_ grid: OpaquePointer) 
+
+@_silgen_name("Grid_Create")
+private func Grid_Create(_ size: Int32, _ minObjects: Int32, _ maxObjects: Int32, 
+                        _ objectTypes: [Int32], _ objectTypesCount: Int32) -> OpaquePointer 
+
+@_silgen_name("Grid_GenerateGrid")
+private func Grid_GenerateGrid(_ grid: OpaquePointer) 
+
+@_silgen_name("Grid_GetCellType")
+private func Grid_GetCellType(_ grid: OpaquePointer, _ row: Int32, _ col: Int32) -> Int32
+
+@_silgen_name("Grid_GetCellOrientation")
+private func Grid_GetCellOrientation(_ grid: OpaquePointer, _ row: Int32, _ col: Int32) -> Int32 

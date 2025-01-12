@@ -2,18 +2,12 @@
 #include <iostream>
 
 extern "C" {
-    GridHandle create_grid(int size, int min_objects, int max_objects) {
-        std::cout << "C++: Creating grid..." << std::endl;
-        std::vector<GridCellType> objects = {
-            GridCellType::Bumper, 
-            GridCellType::DirectionalBumper, 
-            GridCellType::Tunnel,
-            GridCellType::Teleporter,
-            GridCellType::ActivatedBumper
-        };
-        Grid* grid = new Grid(size, min_objects, max_objects, objects);
-        std::cout << "C++: Grid created successfully" << std::endl;
-        return new Grid_t(grid);
+    void* Grid_Create(int size, int minObjects, int maxObjects, const int* objectTypes, int objectTypesCount) {
+        std::vector<GridCellType> types;
+        for (int i = 0; i < objectTypesCount; i++) {
+            types.push_back(static_cast<GridCellType>(objectTypes[i]));
+        }
+        return new Grid(size, minObjects, maxObjects, types);
     }
 
     void destroy_grid(GridHandle handle) {
@@ -24,24 +18,15 @@ extern "C" {
 
     void generate_grid(GridHandle handle) {
         std::cout << "C++: Starting grid generation..." << std::endl;
-        std::cout.flush();  // Force output to be displayed
+        std::cout.flush();
         
-        if (!handle) {
-            std::cout << "C++: Error - null handle!" << std::endl;
-            std::cout.flush();
-            return;
-        }
-        
-        if (!handle->grid) {
+        if (!handle || !handle->grid) {
             std::cout << "C++: Error - null grid!" << std::endl;
             std::cout.flush();
             return;
         }
         
         try {
-            std::cout << "C++: Creating object types vector..." << std::endl;
-            std::cout.flush();
-            
             std::vector<GridCellType> objects = {
                 GridCellType::Bumper,
                 GridCellType::DirectionalBumper,
@@ -50,35 +35,105 @@ extern "C" {
                 GridCellType::ActivatedBumper
             };
             
-            std::cout << "C++: About to call grid->generateGrid..." << std::endl;
-            std::cout.flush();
-            
             handle->grid->generateGrid(objects, 0);
             
-            std::cout << "C++: Grid generation complete" << std::endl;
-            std::cout.flush();
         } catch (const std::exception& e) {
             std::cout << "C++: Exception caught: " << e.what() << std::endl;
-            std::cout.flush();
-        } catch (...) {
-            std::cout << "C++: Unknown exception caught" << std::endl;
             std::cout.flush();
         }
     }
 
+    void Grid_GenerateGrid(void* grid) {
+        if (!grid) {
+            std::cout << "C++: Error - null grid in Grid_GenerateGrid!" << std::endl;
+            return;
+        }
+        
+        try {
+            Grid* actualGrid = static_cast<Grid*>(grid);
+            std::vector<GridCellType> objects = {
+                GridCellType::Bumper,
+                GridCellType::DirectionalBumper,
+                GridCellType::Tunnel,
+                GridCellType::Teleporter,
+                GridCellType::ActivatedBumper
+            };
+            actualGrid->generateGrid(objects, 0);
+        } catch (const std::exception& e) {
+            std::cout << "C++: Exception in Grid_GenerateGrid: " << e.what() << std::endl;
+        }
+    }
+
     int get_cell_type(GridHandle handle, int row, int col) {
-        if (!handle || !handle->grid) return 0;
-        return static_cast<int>(handle->grid->gridCells[row][col].type);
+        if (!handle || !handle->grid) {
+            std::cout << "C++: Null grid in get_cell_type" << std::endl;
+            return 0;
+        }
+        
+        Grid* grid = handle->grid;
+        if (row < 0 || row >= grid->gridSize || col < 0 || col >= grid->gridSize) {
+            std::cout << "C++: Out of bounds access in get_cell_type: " << row << "," << col << std::endl;
+            return 0;
+        }
+        
+        return static_cast<int>(grid->gridCells[row][col].type);
     }
 
     int get_cell_orientation(GridHandle handle, int row, int col) {
-        if (!handle || !handle->grid) return 0;
-        return static_cast<int>(handle->grid->gridCells[row][col].orientation);
+        if (!handle || !handle->grid) {
+            std::cout << "C++: Null grid in get_cell_orientation" << std::endl;
+            return 0;
+        }
+        
+        Grid* grid = handle->grid;
+        if (row < 0 || row >= grid->gridSize || col < 0 || col >= grid->gridSize) {
+            std::cout << "C++: Out of bounds access in get_cell_orientation: " << row << "," << col << std::endl;
+            return 0;
+        }
+        
+        return static_cast<int>(grid->gridCells[row][col].orientation);
     }
 
     bool test_bridge(void) {
         std::cout << "C++: Test function called" << std::endl;
         std::cout.flush();
         return true;
+    }
+
+    void Grid_Destroy(void* grid) {
+        std::cout << "C++: Destroying grid..." << std::endl;
+        if (grid) {
+            delete static_cast<Grid*>(grid);
+        }
+    }
+
+    int Grid_GetCellType(void* grid, int row, int col) {
+        if (!grid) {
+            std::cout << "C++: Null grid in Grid_GetCellType" << std::endl;
+            return 0;
+        }
+        
+        Grid* actualGrid = static_cast<Grid*>(grid);
+        if (row < 0 || row >= actualGrid->gridSize || col < 0 || col >= actualGrid->gridSize) {
+            std::cout << "C++: Out of bounds access in Grid_GetCellType: " << row << "," << col << std::endl;
+            return 0;
+        }
+        
+        return static_cast<int>(actualGrid->gridCells[row][col].type);
+    }
+
+    int Grid_GetCellOrientation(void* grid, int row, int col) {
+        if (!grid) {
+            std::cout << "C++: Null grid in Grid_GetCellOrientation" << std::endl;
+            return 0;
+        }
+        
+        Grid* actualGrid = static_cast<Grid*>(grid);
+        if (row < 0 || row >= actualGrid->gridSize || col < 0 || col >= actualGrid->gridSize) {
+            std::cout << "C++: Out of bounds access in Grid_GetCellOrientation: " << row << "," << col << std::endl;
+            return 0;
+        }
+        
+        return static_cast<int>(actualGrid->gridCells[row][col].orientation);
     }
 } 

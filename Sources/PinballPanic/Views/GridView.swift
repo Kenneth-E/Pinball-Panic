@@ -1,13 +1,20 @@
 import SwiftUI
 
 struct GridView: View {
-    @State private var grid: [[CellType]] = Array(repeating: Array(repeating: .empty, count: 5), count: 5)
+    private let gridSize: Int = 5  // Can be changed
+    @State private var grid: [[CellType]]
     private let gridBridge: GridBridge
     
-    init() {
-        print("GridView: Initializing...")
-        self.gridBridge = GridBridge(size: 5, minObjects: 2, maxObjects: 3)
-        print("GridView: Initialization complete")
+    init(size: Int = 5, 
+         minObjects: Int = 2, 
+         maxObjects: Int = 3,
+         objectTypes: [GridCellType] = [.bumper, .tunnel, .teleporter, .directionalBumper]) {
+        
+        self.grid = Array(repeating: Array(repeating: .empty, count: size), count: size)
+        self.gridBridge = GridBridge(size: Int32(size), 
+                                   minObjects: Int32(minObjects), 
+                                   maxObjects: Int32(maxObjects),
+                                   objectTypes: objectTypes)
     }
     
     enum CellType {
@@ -83,11 +90,13 @@ struct GridView: View {
     }
     
     private var gridView: some View {
-        LazyVGrid(columns: Array(repeating: GridItem(.fixed(50)), count: 5), spacing: 1) {
-            ForEach(0..<25) { index in
-                let row = index / 5
-                let col = index % 5
-                CellView(type: grid[row][col])
+        VStack(spacing: 1) {
+            ForEach(0..<gridSize, id: \.self) { row in
+                HStack(spacing: 1) {
+                    ForEach(0..<gridSize, id: \.self) { col in
+                        CellView(type: grid[row][col])
+                    }
+                }
             }
         }
     }
@@ -106,18 +115,20 @@ struct GridView: View {
     
     private func regenerateGrid() {
         // Reset the grid state
-        grid = Array(repeating: Array(repeating: .empty, count: 5), count: 5)
+        grid = Array(repeating: Array(repeating: .empty, count: gridSize), count: gridSize)
         
         // Generate new grid
         gridBridge.generateGrid()
         
         // Update grid data
-        for row in 0..<5 {
-            for col in 0..<5 {
+        for row in 0..<gridSize {
+            for col in 0..<gridSize {
                 let type = gridBridge.getCellType(row: Int32(row), col: Int32(col))
                 let orientation = gridBridge.getCellOrientation(row: Int32(row), col: Int32(col))
                 grid[row][col] = CellType(from: type, orientation: orientation)
+                print("Cell [\(row),\(col)]: \(grid[row][col])")  // Debug print
             }
+            print("")  // New line after each row
         }
     }
 } 
