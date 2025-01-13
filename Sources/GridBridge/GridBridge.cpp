@@ -136,4 +136,10 @@ extern "C" {
         
         return static_cast<int>(actualGrid->gridCells[row][col].orientation);
     }
+
+    int Grid_GetTeleporterIndex(void* grid, int row, int col) {
+        if (!grid) return 0;
+        Grid* actualGrid = static_cast<Grid*>(grid);
+        return actualGrid->gridCells[row][col].teleporterIndex;
+    }
 } 

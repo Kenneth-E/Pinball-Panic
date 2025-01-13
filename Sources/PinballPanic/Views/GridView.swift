@@ -19,16 +19,17 @@ struct GridView: View {
     
     enum CellType {
         case empty, entry, exit, bumper(GridOrientation), tunnel(GridOrientation), 
-             teleporter, directionalBumper(GridOrientation), activatedBumper(GridOrientation)
+             teleporter(Int),
+             directionalBumper(GridOrientation), activatedBumper(GridOrientation)
         
-        init(from gridCellType: GridCellType, orientation: GridOrientation) {
+        init(from gridCellType: GridCellType, orientation: GridOrientation, teleporterIndex: Int = 0) {
             switch gridCellType {
             case .empty: self = .empty
             case .entry: self = .entry
             case .exit: self = .exit
             case .bumper: self = .bumper(orientation)
             case .tunnel: self = .tunnel(orientation)
-            case .teleporter: self = .teleporter
+            case .teleporter: self = .teleporter(teleporterIndex)
             case .directionalBumper: self = .directionalBumper(orientation)
             case .activatedBumper: self = .activatedBumper(orientation)
             case .inBallPath: self = .empty
@@ -42,7 +43,9 @@ struct GridView: View {
             case .exit: return "X"
             case .bumper(let o): return o == .upRight ? "╱" : "╲"
             case .tunnel(let o): return o == .horizontal ? "=" : "││"
-            case .teleporter: return "*"
+            case .teleporter(let index): 
+                let symbols = ["①", "②", "③", "④", "⑤", "⑥", "⑦", "⑧", "⑨"]
+                return index < symbols.count ? symbols[index] : "*"
             case .directionalBumper(let o): 
                 switch o {
                 case .topRight: return "◹"
@@ -114,21 +117,17 @@ struct GridView: View {
     }
     
     private func regenerateGrid() {
-        // Reset the grid state
         grid = Array(repeating: Array(repeating: .empty, count: gridSize), count: gridSize)
         
-        // Generate new grid
         gridBridge.generateGrid()
         
-        // Update grid data
         for row in 0..<gridSize {
             for col in 0..<gridSize {
                 let type = gridBridge.getCellType(row: Int32(row), col: Int32(col))
                 let orientation = gridBridge.getCellOrientation(row: Int32(row), col: Int32(col))
-                grid[row][col] = CellType(from: type, orientation: orientation)
-                print("Cell [\(row),\(col)]: \(grid[row][col])")  // Debug print
+                let teleporterIndex = type == .teleporter ? gridBridge.getTeleporterIndex(row: Int32(row), col: Int32(col)) : 0
+                grid[row][col] = CellType(from: type, orientation: orientation, teleporterIndex: teleporterIndex)
             }
-            print("")  // New line after each row
         }
     }
 } 

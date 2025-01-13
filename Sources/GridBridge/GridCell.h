@@ -43,6 +43,7 @@ struct GridCell {
     GridCellType type = GridCellType::Empty;
     Direction direction = Direction::None;
     Orientation orientation = Orientation::None;
+    int teleporterIndex = 0;
 };
 
 #endif // GRID_CELL_H

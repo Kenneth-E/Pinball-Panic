@@ -32,12 +32,15 @@ swift run
 
 ## TODO
 
-- Add more objects to the grid
-- Add more features to the game
-- Add more tests
-- Add more documentation
-- Add more error handling
+Gameplay:
+- add timer
+- implemment answer submission + scoring
+
+Mobile navigation:
+- rules page
+- credits page
+- game over screen
+- pause menu
 
 # BUGS
 
-- Invalid grid generation

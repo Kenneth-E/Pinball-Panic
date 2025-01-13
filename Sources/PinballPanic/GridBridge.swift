@@ -59,6 +59,10 @@ class GridBridge {
         let rawValue = Grid_GetCellOrientation(grid, row, col)
         return GridOrientation(rawValue: Int(rawValue)) ?? .none
     }
+    
+    func getTeleporterIndex(row: Int32, col: Int32) -> Int {
+        return Int(Grid_GetTeleporterIndex(grid, row, col))
+    }
 }
 
 private let gridBridgeLib = "libGridBridge.dylib"
@@ -96,3 +100,6 @@ private func Grid_GetCellType(_ grid: OpaquePointer, _ row: Int32, _ col: Int32)
 
 @_silgen_name("Grid_GetCellOrientation")
 private func Grid_GetCellOrientation(_ grid: OpaquePointer, _ row: Int32, _ col: Int32) -> Int32 
+
+@_silgen_name("Grid_GetTeleporterIndex")
+private func Grid_GetTeleporterIndex(_ grid: OpaquePointer, _ row: Int32, _ col: Int32) -> Int32 

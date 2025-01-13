@@ -64,6 +64,7 @@ private:
     void initializeOpenPositions();
     void updateOpenPositions(const Pos& currentPos, Direction currentDirection);
     void removePosition(const Pos& pos);  // Helper to remove a position from openPositions
+    bool isPotentialNewObjectValid(Pos currentPos, Pos potentialPos, Direction currentDirection);
 };
 
 #endif // GRID_H
