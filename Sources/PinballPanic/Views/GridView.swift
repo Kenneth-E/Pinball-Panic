@@ -7,6 +7,9 @@ struct GridView: View {
     @State private var targetPosition: Pos?  // Track the user's selected position
     @State private var exitPosition: Pos?  // Track the exit position
     @State private var remainingTime: Int = 30  // Set the initial countdown time (in seconds)
+    @State private var isGameOver: Bool = false  // Track game over state
+    @State private var correctAnswers: Int = 0  // Track the number of correct answers
+    @State private var currentLevelIndex: Int = 0  // Track the current level
     
     init(size: Int = 10, 
          minObjects: Int = 10, 
@@ -97,6 +100,10 @@ struct GridView: View {
             regenerateGrid()
             startTimer()
         }
+        
+        if isGameOver {
+            GameOverView(correctAnswers: correctAnswers, isGameOver: $isGameOver, currentLevelIndex: $currentLevelIndex)
+        }
     }
     
     private var gridView: some View {
@@ -150,11 +157,13 @@ struct GridView: View {
         if targetPosition == exitPosition! {
             print("Correct!")
             // Reset the timer for the next round
-            remainingTime = 30  // Reset to initial time
+            correctAnswers += 1
+            remainingTime += 5  // Add 5 seconds to the timer for correct answers
             regenerateGrid()  // Regenerate the grid
         } else {
             print("Incorrect!")
             // Handle incorrect answer logic (e.g., stop the game, show a message)
+            isGameOver = true
         }
     }
 
@@ -165,7 +174,7 @@ struct GridView: View {
             } else {
                 timer.invalidate()  // Stop the timer when it reaches zero
                 print("Time's up!")
-                // Handle time's up logic (e.g., show a message, disable input)
+                isGameOver = true  // Set game over state
             }
         }
     }
