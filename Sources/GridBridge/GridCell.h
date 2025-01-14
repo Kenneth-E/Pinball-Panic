@@ -44,6 +44,10 @@ struct GridCell {
     Direction direction = Direction::None;
     Orientation orientation = Orientation::None;
     int teleporterIndex = 0;
+    bool hasBeenActivated = false;
 };
+
+// Add this declaration near the other function declarations
+std::string GridCellTypeToString(GridCellType type);
 
 #endif // GRID_CELL_H

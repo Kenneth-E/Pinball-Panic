@@ -15,3 +15,16 @@ std::string orientationToString(Orientation orientation) {
         default: throw std::invalid_argument("Unknown orientation");
     }
 }
+
+std::string GridCellTypeToString(GridCellType type) {
+    switch (type) {
+        case GridCellType::Empty: return "Empty";
+        case GridCellType::InBallPath: return "InBallPath";
+        case GridCellType::Teleporter: return "Teleporter";
+        case GridCellType::Bumper: return "Bumper";
+        case GridCellType::Tunnel: return "Tunnel";
+        case GridCellType::ActivatedBumper: return "ActivatedBumper";
+        case GridCellType::DirectionalBumper: return "DirectionalBumper";
+        default: throw std::invalid_argument("Unknown grid cell type");
+    }
+}

@@ -45,7 +45,7 @@ public:
     Orientation getViableOrientation(GridCellType type);
 
     Direction getNewDirection(GridCellType type, Direction currentDirection, 
-                        Orientation orientation, const Pos& pos) const;
+                        Orientation orientation, const Pos& pos);
 
 private:
     mutable std::mt19937 rng;
@@ -64,7 +64,8 @@ private:
     void initializeOpenPositions();
     void updateOpenPositions(const Pos& currentPos, Direction currentDirection);
     void removePosition(const Pos& pos);  // Helper to remove a position from openPositions
-    bool isPotentialNewObjectValid(Pos currentPos, Pos potentialPos, Direction currentDirection);
+    bool isPotentialNewObjectValid(Pos nextPos, Pos potentialPos, Direction currentDirection) const;
+    int getNextAvailableTeleporterIndex();
 };
 
 #endif // GRID_H

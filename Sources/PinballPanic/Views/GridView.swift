@@ -4,6 +4,9 @@ struct GridView: View {
     private let gridSize: Int = 10  // Can be changed
     @State private var grid: [[CellType]]
     private let gridBridge: GridBridge
+    @State private var targetPosition: Pos?  // Track the user's selected position
+    @State private var exitPosition: Pos?  // Track the exit position
+    @State private var remainingTime: Int = 30  // Set the initial countdown time (in seconds)
     
     init(size: Int = 10, 
          minObjects: Int = 10, 
@@ -74,6 +77,9 @@ struct GridView: View {
     
     var body: some View {
         VStack(spacing: 20) {
+            Text("Time Remaining: \(remainingTime) seconds")
+                .font(.headline)
+            
             Text("Pinball Panic")
                 .font(.title)
             
@@ -89,6 +95,7 @@ struct GridView: View {
         .padding(20)
         .onAppear {
             regenerateGrid()
+            startTimer()
         }
     }
     
@@ -98,6 +105,10 @@ struct GridView: View {
                 HStack(spacing: 1) {
                     ForEach(0..<gridSize, id: \.self) { col in
                         CellView(type: grid[row][col])
+                            .onTapGesture {
+                                targetPosition = (Int32(row), Int32(col))  // Set the target position
+                                checkAnswer(targetPosition: targetPosition!)  // Call the function to highlight the path
+                            }
                     }
                 }
             }
@@ -127,6 +138,34 @@ struct GridView: View {
                 let orientation = gridBridge.getCellOrientation(row: Int32(row), col: Int32(col))
                 let teleporterIndex = type == .teleporter ? gridBridge.getTeleporterIndex(row: Int32(row), col: Int32(col)) : 0
                 grid[row][col] = CellType(from: type, orientation: orientation, teleporterIndex: teleporterIndex)
+                if type == .exit {
+                    exitPosition = (Int32(row), Int32(col))
+                }
+            }
+        }
+    }
+
+    private func checkAnswer(targetPosition: Pos) {
+        // Check if the answer is correct
+        if targetPosition == exitPosition! {
+            print("Correct!")
+            // Reset the timer for the next round
+            remainingTime = 30  // Reset to initial time
+            regenerateGrid()  // Regenerate the grid
+        } else {
+            print("Incorrect!")
+            // Handle incorrect answer logic (e.g., stop the game, show a message)
+        }
+    }
+
+    private func startTimer() {
+        Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
+            if remainingTime > 0 {
+                remainingTime -= 1
+            } else {
+                timer.invalidate()  // Stop the timer when it reaches zero
+                print("Time's up!")
+                // Handle time's up logic (e.g., show a message, disable input)
             }
         }
     }
